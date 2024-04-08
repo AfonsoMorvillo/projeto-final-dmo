@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Projetofinaldmo"
         tools:targetApi="31">
         <activity
+            android:name=".CadastroContaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TelaInicialActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -23,8 +29,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

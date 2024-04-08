@@ -10,7 +10,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, TelaInicialActivity::class.java)
         val handler = Handler()
         handler.postDelayed(Runnable {
             startActivity(intent)

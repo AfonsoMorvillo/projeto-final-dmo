@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">projeto-final-dmo</string>
+    <string name="btn_criar_conta">Criar conta</string>
+    <string name="btn_entrar">Entrar</string>
+    <string name="Colete_mais">Coleta mais</string>
+    <string name="bem_vindo_ao">Bem-vindo ao</string>
+    <string name="coleta_icone_mais">Coleta +</string>
+    <string name="nome">Nome</string>
+    <string name="e_mail">E-mail</string>
+    <string name="senha">Senha</string>
 </resources>

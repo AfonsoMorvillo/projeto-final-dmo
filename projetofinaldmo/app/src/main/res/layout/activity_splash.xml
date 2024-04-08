@@ -20,9 +20,10 @@
             android:src="@drawable/logo"
             android:adjustViewBounds="true"/>
         <TextView
+            android:paddingTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Coleta +"
+            android:text="@string/coleta_icone_mais"
             android:textSize="50dp"
             android:textAlignment="center"
             android:textColor="@color/white"
