@@ -7,11 +7,11 @@
     android:padding="16dp"
     android:background="@color/dark_gray">
 
-    <!-- Texto "Criar Conta" -->
+    <!-- Texto "Criar Grupo" -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Criar Conta"
+        android:text="Criar grupo"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textFontWeight="1000"
@@ -27,17 +27,17 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:hint="@string/nome"
+        android:hint="Nome do grupo"
         app:hintTextColor="@color/white"
         style="@style/LoginTextInputLayoutStyle"
-       >
+        >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:maxLines="1"
-            android:inputType="textPersonName|textCapWords"
+            android:inputType="textPersonName"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:hint="@string/e_mail"
+        android:hint="Descrição"
         app:hintTextColor="@color/white"
         style="@style/LoginTextInputLayoutStyle"
         >
@@ -56,8 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:maxLines="1"
-            android:inputType="textEmailAddress"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,7 +65,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
-        android:hint="@string/senha"
+        android:hint="Data final"
         app:hintTextColor="@color/white"
         style="@style/LoginTextInputLayoutStyle"
         >
@@ -77,19 +75,41 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:maxLines="1"
-            android:inputType="textPassword"
+            android:inputType="date"
             />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_height="wrap_content"
+        android:hint="Material"
+        app:hintTextColor="@color/white"
+        style="@style/LoginTextInputLayoutStyle"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/material"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+
+            >
+        </AutoCompleteTextView>
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botão de Criar Conta -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_criar_conta"
+        android:id="@+id/btn_criar_grupo"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        android:text="@string/btn_criar_conta"
+        android:text="Criar grupo"
         android:textColor="@color/white"
         android:textSize="15dp"
         android:fontFamily="@font/poppins"
