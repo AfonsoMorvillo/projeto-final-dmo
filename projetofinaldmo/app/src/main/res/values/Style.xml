@@ -5,4 +5,10 @@
         <item name="colorAccent">#fff</item>
         <item name="android:textColorHint">#FFF</item>
     </style>
+
+    <style name="DropDownMenuStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="colorAccent">#fff</item>
+        <item name="android:textColorHint">#FFF</item>
+    </style>
 </resources>

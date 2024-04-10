@@ -6,4 +6,8 @@
     <color name="white">#FFFFFF</color>
     <color name="dark_gray">#303030</color>
     <color name="greenSecondary">#00AF5C</color>
+
+    <style name="InputText_Overlay">
+        <item name="colorPrimary">#FFFFFF</item>
+    </style>
 </resources>

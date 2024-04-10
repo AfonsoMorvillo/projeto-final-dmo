@@ -87,7 +87,9 @@
         android:layout_height="wrap_content"
         android:hint="Material"
         app:hintTextColor="@color/white"
-        style="@style/LoginTextInputLayoutStyle"
+        style="@style/DropDownMenuStyle"
+        android:theme="@style/InputText_Overlay"
+        app:endIconTint="@color/white"
         >
 
         <AutoCompleteTextView
@@ -95,7 +97,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-
+            android:textColor="@android:color/white"
+            android:drawableTint="@color/colorPrimary"
             >
         </AutoCompleteTextView>
 
