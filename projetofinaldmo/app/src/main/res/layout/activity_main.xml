@@ -34,8 +34,7 @@
         android:fontFamily="@font/poppins"
         android:paddingTop="30dp"
         android:text="Você não está em nenhum
-                    grupo de coleta. Crie ou entre
-                    em um grupo."
+                    grupo de coleta. Crie ou junte-se a um grupo."
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textFontWeight="100"
@@ -58,9 +57,9 @@
             android:layout_marginEnd="18dp"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/poppins"
-            android:text="Criar grupo"
+            android:text="Criar"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="17dp"
             app:cornerRadius="15dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -71,9 +70,9 @@
             android:layout_marginStart="18dp"
             android:backgroundTint="@color/greenSecondary"
             android:fontFamily="@font/poppins"
-            android:text="Entrar"
+            android:text="Juntar-se"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="17dp"
             app:cornerRadius="15dp" />
 
     </LinearLayout>

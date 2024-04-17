@@ -11,11 +11,15 @@ class TelaInicialActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tela_inicial)
 
         val btnCriarConta = findViewById<MaterialButton>(R.id.btn_criar_conta)
+        val btnEntrar = findViewById<MaterialButton>(R.id.btn_entrar_conta)
 
-        // Configure o evento de clique para o botão "Criar Conta"
         btnCriarConta.setOnClickListener {
-            // Ao clicar no botão "Criar Conta", inicie a nova atividade (Tela de Cadastro)
             val intent = Intent(this, CadastroContaActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnEntrar.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 

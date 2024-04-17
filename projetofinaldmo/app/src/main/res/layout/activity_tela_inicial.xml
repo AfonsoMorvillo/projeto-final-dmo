@@ -64,7 +64,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/btn_criar_conta"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:fontFamily="@font/poppins"
             app:cornerRadius="15dp"
              />
@@ -76,7 +76,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/white"
             android:text="@string/btn_entrar"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/poppins"
             app:cornerRadius="15dp"
