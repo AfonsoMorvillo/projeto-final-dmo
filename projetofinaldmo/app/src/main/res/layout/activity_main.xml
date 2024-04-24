@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/poppins"
-        android:text="Bem-vindo"
+        android:id="@+id/txt_bemVindo"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textFontWeight="400"

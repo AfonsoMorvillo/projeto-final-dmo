@@ -13,4 +13,5 @@
     <string name="txt_no_account">Não tem cadastro?</string>
     <string name="btn_user_register">Cadastre-se aqui</string>
     <string name="login">Login</string>
+    <string name="login_message_erro">E-mail e/ou senha incorreto.</string>
 </resources>
