@@ -29,20 +29,58 @@ class CadastroContaActivity : AppCompatActivity() {
         val btnCriarConta = findViewById<MaterialButton>(R.id.btn_criar_conta)
 
         btnCriarConta.setOnClickListener {
+            if (validate()) {
 
-            val user = User(
-                email = edtEmail.text.toString(),
-                name = edtName.text.toString(),
-                password = edtPassword.text.toString(),
-                image = "",
-                dateOfBirth = null,
-            )
-            userViewModel.createUser(user)
-            userViewModel.login(user.email, user.password).observe(this, Observer {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            })
+                val user = User(
+                    email = edtEmail.text.toString(),
+                    name = edtName.text.toString(),
+                    password = edtPassword.text.toString(),
+                    image = "",
+                    dateOfBirth = "",
+                )
+                userViewModel.createUser(user)
+                userViewModel.login(user.email, user.password).observe(this, Observer {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                })
+            }
 
         }
     }
+
+    private fun validate(): Boolean {
+        var isValid = true
+
+        edtName.apply {
+            if (text.isNullOrEmpty()) {
+                error = "Preencha o campo nome!"
+                isValid = false
+            } else {
+                error = null
+            }
+        }
+        edtEmail.apply {
+            if (text.isNullOrEmpty()) {
+                error = "Preencha o campo e-mail!"
+                isValid = false
+            } else {
+                error = null
+            }
+        }
+        edtPassword.apply {
+            if (text.isNullOrEmpty()) {
+                error = "Preencha o campo a senha!"
+                isValid = false
+            } else if (text!!.length < 6) {
+                error = "Senha deve conter 6 ou mais caracteres"
+                isValid = false
+            } else {
+                error = null
+            }
+        }
+
+        return isValid
+    }
+
+
 }

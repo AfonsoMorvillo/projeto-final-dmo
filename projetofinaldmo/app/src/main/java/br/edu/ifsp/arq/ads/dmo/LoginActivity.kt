@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
                 else{
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
 
             })
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         btnNewUser.setOnClickListener {
             val intent = Intent(this, CadastroContaActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

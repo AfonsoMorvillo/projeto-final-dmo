@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "663569942217",
+    "project_id": "coletamais",
+    "storage_bucket": "coletamais.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663569942217:android:dbde1dfedc3e0787046f18",
+        "android_client_info": {
+          "package_name": "br.edu.ifsp.arq.ads.dmo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIaCZuNhqNI9mXH91fLtgy5800hdjTBzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
