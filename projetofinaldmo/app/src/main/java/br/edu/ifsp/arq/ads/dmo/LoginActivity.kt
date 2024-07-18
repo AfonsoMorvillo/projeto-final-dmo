@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import br.edu.ifsp.arq.ads.dmo.dialog.DialogLoading
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -15,6 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var edtEmail: TextInputEditText
     lateinit var edtPassword: TextInputEditText
+     lateinit var loading: DialogLoading
 
     private val userViewModel by viewModels<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,20 +28,27 @@ class LoginActivity : AppCompatActivity() {
         edtEmail = findViewById(R.id.editTextEmail)
         edtPassword = findViewById(R.id.editTextSenha)
 
-        btnEntrar.setOnClickListener {
-            userViewModel.login(edtEmail.text.toString(), edtPassword.text.toString()).observe(this, Observer {
+        loading = DialogLoading(this)
 
-                if(it == null){
+        btnEntrar.setOnClickListener {
+            // Mostra a dialog de carregamento
+            loading.showDialog("Carregando...")
+
+            // Realiza a chamada de login no ViewModel
+            userViewModel.login(edtEmail.text.toString(), edtPassword.text.toString()).observe(this, Observer { response ->
+                // Esconde a dialog após receber a resposta
+
+                if (response == null) {
                     Toast.makeText(applicationContext, getString(R.string.login_message_erro), Toast.LENGTH_SHORT).show()
-                }
-                else{
+                } else {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
-
+                loading.hideDialog()
             })
         }
+
 
         btnNewUser.setOnClickListener {
             val intent = Intent(this, CadastroContaActivity::class.java)
