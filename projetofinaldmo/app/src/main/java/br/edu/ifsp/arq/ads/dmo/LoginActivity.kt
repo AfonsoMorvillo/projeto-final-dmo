@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var edtEmail: TextInputEditText
     lateinit var edtPassword: TextInputEditText
-     lateinit var loading: DialogLoading
+    lateinit var loading: DialogLoading
 
     private val userViewModel by viewModels<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,24 +31,26 @@ class LoginActivity : AppCompatActivity() {
         loading = DialogLoading(this)
 
         btnEntrar.setOnClickListener {
-            // Mostra a dialog de carregamento
             loading.showDialog("Carregando...")
 
-            // Realiza a chamada de login no ViewModel
-            userViewModel.login(edtEmail.text.toString(), edtPassword.text.toString()).observe(this, Observer { response ->
-                // Esconde a dialog após receber a resposta
-
-                if (response == null) {
-                    Toast.makeText(applicationContext, getString(R.string.login_message_erro), Toast.LENGTH_SHORT).show()
-                } else {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                loading.hideDialog()
-            })
+            userViewModel.login(edtEmail.text.toString(), edtPassword.text.toString())
+                .observe(this, Observer { response ->
+                    if (response != null) {
+                        if (response?.id == "ERRO") {
+                            Toast.makeText(
+                                applicationContext,
+                                getString(R.string.login_message_erro),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        loading.hideDialog()
+                    }
+                })
         }
-
 
         btnNewUser.setOnClickListener {
             val intent = Intent(this, CadastroContaActivity::class.java)

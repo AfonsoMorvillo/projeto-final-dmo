@@ -24,7 +24,6 @@ class UsersRepository (application: Application) {
     private val preference = PreferenceManager.getDefaultSharedPreferences(application)
 
     fun login(email: String, password: String) : LiveData<User> {
-
         val liveData = MutableLiveData<User>(null)
 
         val params = JSONObject().also {
@@ -56,6 +55,10 @@ class UsersRepository (application: Application) {
                     }
             }
             , Response.ErrorListener { error ->
+                val user = User()
+                user?.id = "ERRO"
+
+                liveData.value = user
                 Log.e(this.toString(), error.message ?: "Error")
             }
         )
