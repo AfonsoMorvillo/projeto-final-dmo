@@ -32,6 +32,8 @@ class UserViewModel (application: Application) : AndroidViewModel(application) {
         return usersRepository.load(id)
     }
 
+    fun resetPassword(email: String) = usersRepository.resetPassword(email)
+
     companion object {
         val USER_ID = "USER_ID"
     }

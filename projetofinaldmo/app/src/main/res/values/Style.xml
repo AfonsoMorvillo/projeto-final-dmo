@@ -11,4 +11,29 @@
         <item name="colorAccent">#fff</item>
         <item name="android:textColorHint">#FFF</item>
     </style>
+
+    <style name="CustomAlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:background">@color/dark_gray</item>
+        <!-- Cor do texto do título -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Neutral</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral</item>
+    </style>
+
+    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+
+        <item name="android:textColor">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
+
+        <item name="android:textColor">@color/colorPrimary</item>
+
+    </style>
+
+
+
+
 </resources>
