@@ -52,7 +52,7 @@
         style="@style/LoginTextInputLayoutStyle"
         >
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/editTextDescricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
@@ -70,7 +70,7 @@
         style="@style/LoginTextInputLayoutStyle"
         >
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextSenha"
+            android:id="@+id/editTextDataFinal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
@@ -93,7 +93,7 @@
         >
 
         <AutoCompleteTextView
-            android:id="@+id/material"
+            android:id="@+id/complete_tipo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
