@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         btnCriarGrupo.setOnClickListener {
 
-            userViewModel.logout();
-
             val intent = Intent(this, CadastroGrupoActivity::class.java)
             startActivity(intent)
         }

@@ -34,6 +34,10 @@ class CadastroGrupoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_grupo);
 
+        grupo = Grupo()
+        grupo.id = "0"
+        println(grupo)
+
         setComponents()
         setBtnSave()
     }
