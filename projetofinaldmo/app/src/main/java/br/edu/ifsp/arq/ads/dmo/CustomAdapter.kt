@@ -7,49 +7,49 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import br.edu.ifsp.arq.ads.dmo.model.Grupo
 
-class CustomAdapter(private val listener: OnItemClickListener): RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
-
-    val titles = arrayOf("Grupo A", "Grupo B")
-    val details = arrayOf("Descricao A", "Descricao B")
-
-    val images = intArrayOf(R.drawable.menu_vazio, R.drawable.logo_verde)
+class CustomAdapter(private val listener: OnItemClickListener, private var grupos: List<Grupo>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.card_layout,viewGroup,false)
+        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.card_layout, viewGroup, false)
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
-        viewHolder.itemTitle.text = titles[i]
-        viewHolder.itemDetail.text = details[i]
-        viewHolder.itemImage.setImageResource( images[i])
+        val grupo = grupos[i]
+        viewHolder.itemTitle.text = grupo.nome
+        viewHolder.itemDetail.text = grupo.descricao
+        viewHolder.itemImage.setImageResource(R.drawable.menu_vazio) // Ajuste conforme necessário para as imagens
 
         viewHolder.itemView.setOnClickListener {
-            listener.onItemClick(i) // Notifica o listener quando o card é clicado
+            listener.onItemClick(i)
         }
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return grupos.size
     }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        var itemImage: ImageView
-        var itemTitle: TextView
-        var itemDetail: TextView
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var itemImage: ImageView = itemView.findViewById(R.id.item_image)
+        var itemTitle: TextView = itemView.findViewById(R.id.item_title)
+        var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
 
         init {
-            itemImage = itemView.findViewById(R.id.item_image)
-            itemTitle = itemView.findViewById(R.id.item_title)
-            itemDetail = itemView.findViewById(R.id.item_detail)
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)
             }
         }
+    }
+
+    // Adicione um método para atualizar os dados
+    fun updateGrupos(novosGrupos: List<Grupo>) {
+        grupos = novosGrupos
+        notifyDataSetChanged()
     }
 }

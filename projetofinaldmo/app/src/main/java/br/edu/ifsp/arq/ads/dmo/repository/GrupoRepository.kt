@@ -52,7 +52,7 @@ class GrupoRepository (application: Application) {
             return liveData
         }
 
-        firestore.collection("groups").whereArrayContains("memberIds", userId).get()
+        firestore.collection("grupo").whereArrayContains("memberIds", userId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     for (doc in task.result) {
