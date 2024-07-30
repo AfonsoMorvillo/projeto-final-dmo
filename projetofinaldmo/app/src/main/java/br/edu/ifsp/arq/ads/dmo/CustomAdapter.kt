@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
@@ -23,7 +24,7 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         val grupo = grupos[i]
         viewHolder.itemTitle.text = grupo.nome
-        viewHolder.itemDetail.text = grupo.descricao
+        viewHolder.teste.progress = 80
         viewHolder.itemImage.setImageResource(R.drawable.menu_vazio) // Ajuste conforme necessário para as imagens
 
         viewHolder.itemView.setOnClickListener {
@@ -38,7 +39,8 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemImage: ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
-        var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
+
+        var teste: ProgressBar= itemView.findViewById(R.id.progressBar)
 
         init {
             itemView.setOnClickListener {
