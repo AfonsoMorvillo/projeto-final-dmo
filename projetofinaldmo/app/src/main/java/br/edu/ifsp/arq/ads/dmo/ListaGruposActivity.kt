@@ -64,7 +64,8 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
 
     override fun onItemClick(position: Int) {
 
-        Toast.makeText(this, "Clicou no item $position", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, VisualizarGrupoActivity::class.java)
+            startActivity(intent)
 
     }
 }
