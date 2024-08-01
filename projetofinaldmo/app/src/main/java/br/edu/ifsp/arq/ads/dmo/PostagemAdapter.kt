@@ -1,8 +1,10 @@
 package br.edu.ifsp.arq.ads.dmo
 
+import android.graphics.Outline
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -24,7 +26,16 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         val postagem = postagens[i]
         viewHolder.itemTitle.text = postagem.nome
-        viewHolder.itemImage.setImageResource(R.drawable.menu_vazio) // Ajuste conforme necessário para as imagens
+        viewHolder.itemUsuario.text = postagem.userId
+
+        viewHolder.itemImage.clipToOutline = true
+        viewHolder.itemImage.outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                val diameter = view.width
+                outline.setOval(0, 0, diameter, diameter)
+            }
+        }
+        viewHolder.itemImage.setImageResource(R.drawable.whit_background) // Ajuste conforme necessário para as imagens
 
         viewHolder.itemView.setOnClickListener {
             listener.onItemClick(i)
@@ -38,6 +49,8 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemImage: ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
+        var itemUsuario: TextView = itemView.findViewById(R.id.item_usuario)
+
 
         init {
             itemView.setOnClickListener {

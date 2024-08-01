@@ -6,7 +6,7 @@
     android:id="@+id/card_view"
     android:layout_margin="12dp"
     card_view:cardBackgroundColor="@color/gray"
-    card_view:cardCornerRadius="20dp"
+    card_view:cardCornerRadius="10dp"
     card_view:cardElevation="6dp"
     card_view:contentPadding="4dp"
     card_view:cardUseCompatPadding="true"
@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/item_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -27,17 +28,32 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp" />
 
+
         <TextView
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@id/item_image"
             android:layout_toRightOf="@id/item_image"
             android:fontFamily="@font/poppins"
             android:text="Grupo A"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/item_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+
+
+            android:layout_below="@id/item_title"
+            android:layout_toEndOf="@id/item_image"
+            android:layout_toRightOf="@id/item_image"
+
+            android:fontFamily="@font/poppins"
+            android:text="Grupo A"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

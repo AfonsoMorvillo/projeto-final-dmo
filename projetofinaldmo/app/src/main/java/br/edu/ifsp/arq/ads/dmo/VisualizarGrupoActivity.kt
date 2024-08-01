@@ -25,7 +25,7 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        this.supportActionBar?.hide()
         setContentView(R.layout.activity_visualizar_grupo)
 
         recycylerView = findViewById<RecyclerView>(R.id.recyclerViewPostagens)
