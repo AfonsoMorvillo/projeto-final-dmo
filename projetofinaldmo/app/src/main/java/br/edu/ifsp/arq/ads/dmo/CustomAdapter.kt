@@ -1,5 +1,6 @@
 package br.edu.ifsp.arq.ads.dmo
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,12 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
         val grupo = grupos[i]
         viewHolder.itemTitle.text = grupo.nome
         viewHolder.teste.progress = 80
-        viewHolder.itemImage.setImageResource(R.drawable.menu_vazio) // Ajuste conforme necessário para as imagens
+
+        if (grupo.foto != "") {
+            viewHolder.itemImage.setImageURI(Uri.parse(grupo.foto))
+        } else {
+            viewHolder.itemImage.setImageResource(R.drawable.menu_vazio)
+        }
 
         viewHolder.itemView.setOnClickListener {
             listener.onItemClick(i)

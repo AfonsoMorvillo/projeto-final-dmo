@@ -9,12 +9,14 @@ data class Grupo(
     var nome: String = "",
     var descricao: String = "",
     var dataFinal: String = "",
+    var foto: String = "",
     var tipoMaterial: TipoMaterial? = TipoMaterial.LATA,
     var memberIds: List<String> = emptyList()
 ) : Serializable {
 
     constructor() : this(
         UUID.randomUUID().toString(),
+        "",
         "",
         "",
         "",
