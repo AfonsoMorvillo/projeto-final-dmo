@@ -23,12 +23,13 @@ class SplashActivity : AppCompatActivity() {
             }else{
                 intent = Intent(this, MainActivity::class.java)
             }
+
+            val handler = Handler()
+            handler.postDelayed(Runnable {
+                startActivity(intent)
+                finish()
+            }, 3000)
         })
 
-        val handler = Handler()
-        handler.postDelayed(Runnable {
-            startActivity(intent)
-            finish()
-        }, 3000)
     }
 }

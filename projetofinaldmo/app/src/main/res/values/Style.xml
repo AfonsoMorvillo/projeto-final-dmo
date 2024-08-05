@@ -34,4 +34,14 @@
     </style>
 
 
+    <!-- Estilo personalizado para o FloatingActionButton -->
+    <style name="CustomFAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="fabSize">normal</item>
+        <item name="borderWidth">0dp</item> <!-- Remove a borda se necessário -->
+    </style>
+
+
+
+
 </resources>

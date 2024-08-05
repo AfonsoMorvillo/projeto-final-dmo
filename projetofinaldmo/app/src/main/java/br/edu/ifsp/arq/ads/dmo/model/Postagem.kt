@@ -8,7 +8,9 @@ data class Postagem(
     var userId: String = "",
     var nome: String = "",
     var descricao: String = "",
-    var quantidade: Int = 0,
+    var quantidade: String = "",
+    var foto: String = "",
+    var data: String = "",
 ) : Serializable {
 
     constructor() : this(
@@ -16,7 +18,9 @@ data class Postagem(
         "",
         "",
         "",
-        0,
+        "",
+        "",
+        ""
     )
 
 }

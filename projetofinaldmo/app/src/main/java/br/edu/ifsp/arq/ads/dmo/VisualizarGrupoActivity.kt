@@ -1,14 +1,13 @@
 package br.edu.ifsp.arq.ads.dmo
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
@@ -23,23 +22,28 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     private val userViewModel by viewModels<UserViewModel>()
 
     lateinit var user: User
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.supportActionBar?.hide()
         setContentView(R.layout.activity_visualizar_grupo)
 
         recycylerView = findViewById<RecyclerView>(R.id.recyclerViewPostagens)
-        adapter = PostagemAdapter(this,  listOf(Postagem("teste", "teste","nova postagen", "descricao", 10)))
-
+        adapter = PostagemAdapter(this, listOf(Postagem("teste", "teste", "nova postagen", "descricao", "","","")))
 
         recycylerView.layoutManager = LinearLayoutManager(this)
         recycylerView.adapter = adapter
         adapter.notifyDataSetChanged()
+
+        val fab: FloatingActionButton = findViewById(R.id.fab_add)
+
+        fab.setOnClickListener {
+            val intent = Intent(this, CadastroPostagemActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onItemClick(position: Int) {
-
         Toast.makeText(this, "Clicou no item $position", Toast.LENGTH_SHORT).show()
-
     }
 }

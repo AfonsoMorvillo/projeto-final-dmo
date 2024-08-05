@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Projetofinaldmo"
         tools:targetApi="31">
         <activity
+            android:name=".CadastroPostagemActivity"
+            android:exported="false" />
+        <activity
             android:name=".VisualizarGrupoActivity"
             android:exported="false" />
         <activity
@@ -51,15 +54,14 @@
             android:resource="@array/preloaded_fonts" />
 
         <provider
-            android:authorities="br.edu.ifsp.arq.ads.dmo.projetofinaldmo.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="br.edu.ifsp.arq.ads.dmo.projetofinaldmo.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

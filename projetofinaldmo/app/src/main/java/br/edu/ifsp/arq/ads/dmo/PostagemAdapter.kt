@@ -35,6 +35,7 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
                 outline.setOval(0, 0, diameter, diameter)
             }
         }
+        viewHolder.itemImage.setImageResource(R.drawable.menu_vazio)
 
         viewHolder.itemView.setOnClickListener {
             listener.onItemClick(i)
