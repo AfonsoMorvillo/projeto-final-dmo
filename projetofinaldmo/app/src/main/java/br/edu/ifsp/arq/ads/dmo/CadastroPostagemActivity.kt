@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.model.User
+import br.edu.ifsp.arq.ads.dmo.viewmodel.PostagemViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
@@ -46,11 +48,18 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
     val REQUEST_TAKE_PHOTO = 1
 
+    lateinit var grupoId: String
+
     private val userViewModel by viewModels<UserViewModel>()
+    private val postViewModel by viewModels<PostagemViewModel>()
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cadastro_postagem);
+        setContentView(R.layout.activity_cadastro_postagem)
+
+        grupoId = intent.getStringExtra("GROUP_ID").toString()
+        println(grupoId)
 
         postagem = Postagem()
         postagem.id = "0"
@@ -184,16 +193,16 @@ class CadastroPostagemActivity : AppCompatActivity() {
                 txtTitulo.text.toString(),
                 txtDescricao.text.toString(),
                 txtQuantidade.text.toString(),
-                //photoURI.toString(),
-                "",
+                "", // salvar a foto
                 txtData.text.toString(),
+                grupoId
             )
-//            grupoActivity.createGrupo(grupo)
-//            Toast.makeText(
-//                this@CadastroGrupoActivity,
-//                "Grupo adicionado com sucesso!",
-//                Toast.LENGTH_SHORT
-//            ).show()
+            postViewModel.createPostagem(postagem)
+            Toast.makeText(
+                this@CadastroPostagemActivity,
+                "Postagem publicada com sucesso!",
+                Toast.LENGTH_SHORT
+            ).show()
             finish()
         }
     }

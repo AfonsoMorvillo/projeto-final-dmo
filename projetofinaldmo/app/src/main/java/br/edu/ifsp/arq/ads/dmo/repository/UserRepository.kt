@@ -15,7 +15,7 @@ import com.android.volley.toolbox.Volley
 import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONObject
 
-class UsersRepository (application: Application) {
+class UserRepository (application: Application) {
 
     private val firestore = FirebaseFirestore.getInstance()
 

@@ -14,7 +14,7 @@ import br.edu.ifsp.arq.ads.dmo.model.Grupo
 class CustomAdapter(private val listener: OnItemClickListener, private var grupos: List<Grupo>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(groupId: String)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
@@ -25,7 +25,7 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         val grupo = grupos[i]
         viewHolder.itemTitle.text = grupo.nome
-        viewHolder.teste.progress = 80
+        viewHolder.progressBar.progress = 80
 
         if (grupo.foto != "") {
             viewHolder.itemImage.setImageURI(Uri.parse(grupo.foto))
@@ -34,9 +34,10 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
         }
 
         viewHolder.itemView.setOnClickListener {
-            listener.onItemClick(i)
+            listener.onItemClick(grupo.id)
         }
     }
+
 
     override fun getItemCount(): Int {
         return grupos.size
@@ -45,12 +46,14 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemImage: ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
-
-        var teste: ProgressBar= itemView.findViewById(R.id.progressBar)
+        var progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
 
         init {
             itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(grupos[position].id)
+                }
             }
         }
     }

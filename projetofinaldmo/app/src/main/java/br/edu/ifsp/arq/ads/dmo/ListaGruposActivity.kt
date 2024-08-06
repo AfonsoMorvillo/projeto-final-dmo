@@ -62,10 +62,10 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
         })
     }
 
-    override fun onItemClick(position: Int) {
-
-            val intent = Intent(this, VisualizarGrupoActivity::class.java)
-            startActivity(intent)
-
+    override fun onItemClick(groupId: String) {
+        val intent = Intent(this, VisualizarGrupoActivity::class.java)
+        intent.putExtra("GROUP_ID", groupId)
+        startActivity(intent)
     }
+
 }

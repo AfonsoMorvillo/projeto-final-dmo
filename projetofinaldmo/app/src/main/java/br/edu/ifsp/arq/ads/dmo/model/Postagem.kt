@@ -11,10 +11,12 @@ data class Postagem(
     var quantidade: String = "",
     var foto: String = "",
     var data: String = "",
+    var grupoId: String = ""
 ) : Serializable {
 
     constructor() : this(
         UUID.randomUUID().toString(),
+        "",
         "",
         "",
         "",
