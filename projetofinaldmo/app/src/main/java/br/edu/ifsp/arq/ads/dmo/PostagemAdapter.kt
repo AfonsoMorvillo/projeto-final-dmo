@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
+import com.bumptech.glide.Glide
 
 class PostagemAdapter(private val listener: OnItemClickListener, private var postagens: List<Postagem>) : RecyclerView.Adapter<PostagemAdapter.ViewHolder>() {
 
@@ -35,7 +34,16 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
                 outline.setOval(0, 0, diameter, diameter)
             }
         }
-        viewHolder.itemImage.setImageResource(R.drawable.menu_vazio)
+
+        // Use Glide para carregar a imagem da URL
+        if (postagem.foto.isNotEmpty()) {
+            Glide.with(viewHolder.itemImage.context)
+                .load(postagem.foto)
+                .placeholder(R.drawable.menu_vazio) // Imagem de placeholder enquanto a imagem carrega
+                .into(viewHolder.itemImage)
+        } else {
+            viewHolder.itemImage.setImageResource(R.drawable.menu_vazio)
+        }
 
         viewHolder.itemView.setOnClickListener {
             listener.onItemClick(i)
@@ -50,7 +58,6 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
         var itemImage: ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
         var itemUsuario: TextView = itemView.findViewById(R.id.item_usuario)
-
 
         init {
             itemView.setOnClickListener {
