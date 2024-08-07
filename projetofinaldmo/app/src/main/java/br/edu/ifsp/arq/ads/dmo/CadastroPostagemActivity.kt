@@ -186,7 +186,6 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
     private fun addPostagem() {
         if (validate()) {
-
             val postagem = Postagem(
                 UUID.randomUUID().toString(),
                 user.id,
@@ -203,9 +202,11 @@ class CadastroPostagemActivity : AppCompatActivity() {
                 "Postagem publicada com sucesso!",
                 Toast.LENGTH_SHORT
             ).show()
+            setResult(RESULT_OK)
             finish()
         }
     }
+
 
     private fun validate(): Boolean {
         var isValid = true
