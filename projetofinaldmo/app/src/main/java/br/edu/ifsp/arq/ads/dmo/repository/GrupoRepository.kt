@@ -1,17 +1,36 @@
 package br.edu.ifsp.arq.ads.dmo.repository
 
 import android.app.Application
+import android.net.Uri
+import android.preference.PreferenceManager
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.edu.ifsp.arq.ads.dmo.R
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import java.util.UUID
 
 
 class GrupoRepository (application: Application) {
 
     private val firestore = FirebaseFirestore.getInstance()
+
+    private val glide = Glide.with(application)
+
+    private val storage = Firebase.storage(Firebase.app)
+
+    private val preference = PreferenceManager.getDefaultSharedPreferences(application)
+
 
     fun insert(grupo: Grupo?) {
         firestore.collection("grupo").add(grupo!!)
@@ -66,5 +85,29 @@ class GrupoRepository (application: Application) {
 
         return liveData
     }
+
+    fun uploadGrupoImagem(grupoId: String, imageUri: Uri) : LiveData<String> {
+
+        val liveData = MutableLiveData<String>()
+
+        val imageRef = storage.reference.child("grupos/${grupoId}.jpg")
+
+        imageRef.putFile(imageUri).addOnSuccessListener { taskSnapshot->
+            imageRef.downloadUrl.addOnSuccessListener {
+                liveData.value =  it.toString();
+            }
+        }
+
+        return liveData
+    }
+
+    fun loadGrupo(grupoId: String, imageView: ImageView) = storage.reference.child("grupos/$grupoId/profile.jpg")
+        .downloadUrl.addOnSuccessListener {
+            glide.load(it)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.drawable.menu_vazio)
+                .placeholder(R.drawable.menu_vazio)
+                .into(imageView)
+        }
 
 }

@@ -35,11 +35,12 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
             }
         }
 
-        // Use Glide para carregar a imagem da URL
         if (postagem.foto.isNotEmpty()) {
             Glide.with(viewHolder.itemImage.context)
                 .load(postagem.foto)
-                .placeholder(R.drawable.menu_vazio) // Imagem de placeholder enquanto a imagem carrega
+                .placeholder(R.drawable.carregando) // Imagem de placeholder enquanto a imagem carrega
+                .error(R.drawable.menu_vazio)
+                .fallback(R.drawable.menu_vazio)
                 .into(viewHolder.itemImage)
         } else {
             viewHolder.itemImage.setImageResource(R.drawable.menu_vazio)

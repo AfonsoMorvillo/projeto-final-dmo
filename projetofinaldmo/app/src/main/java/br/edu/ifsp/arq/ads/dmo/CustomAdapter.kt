@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
+import com.bumptech.glide.Glide
 
 class CustomAdapter(private val listener: OnItemClickListener, private var grupos: List<Grupo>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -27,8 +28,13 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
         viewHolder.itemTitle.text = grupo.nome
         viewHolder.progressBar.progress = 80
 
-        if (grupo.foto != "") {
-            viewHolder.itemImage.setImageURI(Uri.parse(grupo.foto))
+        if (grupo.foto.isNotEmpty()) {
+            Glide.with(viewHolder.itemImage.context)
+                .load(grupo.foto)
+                .placeholder(R.drawable.carregando) // Imagem de placeholder enquanto a imagem carrega
+                .error(R.drawable.menu_vazio)
+                .fallback(R.drawable.menu_vazio)
+                .into(viewHolder.itemImage)
         } else {
             viewHolder.itemImage.setImageResource(R.drawable.menu_vazio)
         }

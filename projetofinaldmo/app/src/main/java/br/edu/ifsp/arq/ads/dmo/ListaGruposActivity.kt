@@ -33,7 +33,6 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
     private fun setAdapter() {
         grupoViewModel.getAllGroups(user.id).observe(this, Observer{
 
-            println(it)
             adapter = CustomAdapter(
                 this,
                 it

@@ -72,6 +72,8 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     }
 
     override fun onItemClick(position: Int) {
-        Toast.makeText(this, "Clicou no item $position", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, PostagemActivity::class.java)
+        //intent.putExtra("POST_ID", post)
+        startActivity(intent)
     }
 }

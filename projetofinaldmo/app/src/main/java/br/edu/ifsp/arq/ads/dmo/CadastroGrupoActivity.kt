@@ -1,15 +1,14 @@
 package br.edu.ifsp.arq.ads.dmo
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -36,15 +35,16 @@ class CadastroGrupoActivity : AppCompatActivity() {
     lateinit var btnSave: Button
 
     private val userViewModel by viewModels<UserViewModel>()
-    private val grupoActivity by viewModels<GrupoViewModel>()
+    private val grupoViewModel by viewModels<GrupoViewModel>()
 
     lateinit var user: User
     lateinit var grupo: Grupo
 
     lateinit var adicionarImagem: Button
-    lateinit var photoURI: Uri
 
-    val REQUEST_TAKE_PHOTO = 1
+    private var imageUri: Uri? = null
+
+    private val PICK_IMAGE_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,61 +56,6 @@ class CadastroGrupoActivity : AppCompatActivity() {
 
         setComponents()
         setBtnSave()
-        setImageProfile()
-    }
-
-    private fun setImageProfile() {
-        adicionarImagem = findViewById(R.id.btn_adicionar_imagem)
-        adicionarImagem.setOnClickListener{ takePicture() }
-
-        val profileImage = PreferenceManager.getDefaultSharedPreferences(this).getString(MediaStore.EXTRA_OUTPUT, null)
-
-        if (profileImage != null) {
-            photoURI = Uri.parse(profileImage)
-           // imageProfile.setImageURI(photoURI)
-        } else {
-            photoURI = Uri.parse("/")
-           // imageProfile.setImageResource(R.drawable.ic_menu_account)
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timesTamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "PROFILE_${timesTamp}",
-            ".jpg",
-            storageDir
-        )
-    }
-
-    private fun takePicture() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-            intent.resolveActivity(packageManager)?.also {
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    null
-                }
-                photoFile?.also {
-                    photoURI = FileProvider.getUriForFile(this,
-                        "br.edu.ifsp.arq.ads.dmo.projetofinaldmo.fileprovider",
-                        it)
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(intent, REQUEST_TAKE_PHOTO)
-                }
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        PreferenceManager.getDefaultSharedPreferences(this).apply {
-            edit().putString(MediaStore.EXTRA_OUTPUT, photoURI.toString()).apply()
-        }
-
-        //imageProfile.setImageURI(photoURI)
     }
 
     private fun setComponents() {
@@ -120,8 +65,21 @@ class CadastroGrupoActivity : AppCompatActivity() {
         txtDataFinal = findViewById<TextInputEditText>(R.id.editTextDataFinal)
         autoCompleteTipo = findViewById<AutoCompleteTextView>(R.id.complete_tipo)
         btnSave = findViewById<Button>(R.id.btn_criar_grupo)
+
+        adicionarImagem = findViewById(R.id.btn_adicionar_imagem)
+        adicionarImagem.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            imageUri = data.data
+           // imageView.setImageURI(imageUri)
+        }
+    }
     private fun setSelectTipo() {
         val type = Grupo.TipoMaterial.values().map { it.value }.toTypedArray()
         val adapter = ArrayAdapter(this, R.layout.drop_down_material_item, type)
@@ -133,7 +91,6 @@ class CadastroGrupoActivity : AppCompatActivity() {
             Toast.makeText(this, "Item selecionado: $selectedItem", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun setBtnSave() {
         btnSave.setOnClickListener {
@@ -165,26 +122,44 @@ class CadastroGrupoActivity : AppCompatActivity() {
     private fun addGrupo() {
         if (validate()) {
 
+            val id = UUID.randomUUID().toString();
             val tipoMaterialText = autoCompleteTipo.text.toString()
             val tipoMaterial = Grupo.TipoMaterial.values().find { it.value == tipoMaterialText }
 
             val grupo = Grupo(
-                UUID.randomUUID().toString(),
+                id,
                 user.id,
                 txtNome.text.toString(),
                 txtDescricao.text.toString(),
                 txtDataFinal.text.toString(),
-                photoURI.toString(),
+                "",
                 tipoMaterial,
                 memberIds = listOf(user.id)
             )
-            grupoActivity.createGrupo(grupo)
-            Toast.makeText(
-                this@CadastroGrupoActivity,
-                "Grupo adicionado com sucesso!",
-                Toast.LENGTH_SHORT
-            ).show()
-            finish()
+
+            if (imageUri != null) {
+
+                grupoViewModel.uploadGrupoImage(id, imageUri!!).observe(this) {
+                    grupo.foto = it
+                    grupoViewModel.createGrupo(grupo)
+                    Toast.makeText(
+                        this@CadastroGrupoActivity,
+                        "Grupo adicionado com sucesso!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+            }else{
+                // sem imagem
+                grupoViewModel.createGrupo(grupo)
+                Toast.makeText(
+                    this@CadastroGrupoActivity,
+                    "Grupo adicionado com sucesso!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }
+
         }
     }
 

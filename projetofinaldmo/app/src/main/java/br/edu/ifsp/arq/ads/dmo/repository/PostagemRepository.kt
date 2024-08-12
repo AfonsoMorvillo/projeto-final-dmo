@@ -1,22 +1,12 @@
 package br.edu.ifsp.arq.ads.dmo.repository
 
 import android.app.Application
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.edu.ifsp.arq.ads.dmo.database.AppDatabase
-import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
-import br.edu.ifsp.arq.ads.dmo.model.User
-import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import org.json.JSONObject
 
 class PostagemRepository (application: Application) {
 
@@ -75,6 +65,34 @@ class PostagemRepository (application: Application) {
 
         return liveData
     }
+
+    fun getPost(postId: String?): LiveData<Postagem> {
+        val liveData = MutableLiveData<Postagem>()
+
+        if (postId.isNullOrEmpty()) {
+            liveData.value = null
+            return liveData
+        }
+
+        firestore.collection("postagem").document(postId).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document != null && document.exists()) {
+                        val post = document.toObject(Postagem::class.java)
+                        post?.id = document.id
+                        liveData.value = post
+                    } else {
+                        liveData.value = null
+                    }
+                } else {
+                    liveData.value = null
+                }
+            }
+
+        return liveData
+    }
+
 
 
 
