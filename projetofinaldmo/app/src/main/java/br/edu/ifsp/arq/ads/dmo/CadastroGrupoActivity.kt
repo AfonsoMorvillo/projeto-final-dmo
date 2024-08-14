@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import br.edu.ifsp.arq.ads.dmo.dialog.DialogLoading
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
@@ -27,6 +28,7 @@ class CadastroGrupoActivity : AppCompatActivity() {
     lateinit var txtMeta: TextInputEditText
     lateinit var autoCompleteTipo: AutoCompleteTextView
     lateinit var btnSave: Button
+    lateinit var loading: DialogLoading
 
     private val userViewModel by viewModels<UserViewModel>()
     private val grupoViewModel by viewModels<GrupoViewModel>()
@@ -46,7 +48,7 @@ class CadastroGrupoActivity : AppCompatActivity() {
 
         grupo = Grupo()
         grupo.id = "0"
-        println(grupo)
+        loading = DialogLoading(this)
 
         setComponents()
         setBtnSave()
@@ -89,7 +91,7 @@ class CadastroGrupoActivity : AppCompatActivity() {
 
     private fun setBtnSave() {
         btnSave.setOnClickListener {
-            println(grupo.id)
+            loading.showDialog("Carregando...")
             if (grupo.id == "0") {
                 addGrupo()
             } else {
@@ -146,7 +148,9 @@ class CadastroGrupoActivity : AppCompatActivity() {
                         "Grupo adicionado com sucesso!",
                         Toast.LENGTH_SHORT
                     ).show()
-                    finish()
+                    loading.hideDialog()
+                    val intent = Intent(this, ListaGruposActivity::class.java)
+                    startActivity(intent)
                 }
             }else{
                 // sem imagem
@@ -156,9 +160,13 @@ class CadastroGrupoActivity : AppCompatActivity() {
                     "Grupo adicionado com sucesso!",
                     Toast.LENGTH_SHORT
                 ).show()
-                finish()
+                loading.hideDialog()
+                val intent = Intent(this, ListaGruposActivity::class.java)
+                startActivity(intent)
             }
 
+        }else{
+            loading.hideDialog()
         }
     }
 

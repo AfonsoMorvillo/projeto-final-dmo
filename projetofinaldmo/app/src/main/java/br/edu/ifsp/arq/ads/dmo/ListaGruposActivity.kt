@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListener {
 
@@ -28,11 +29,21 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
 
         recycylerView = findViewById<RecyclerView>(R.id.recyclerView)
         loadUserLogged()
+        setFloatButton()
     }
 
     private fun setAdapter() {
         grupoViewModel.getAllGroups(user.id).observe(this, Observer{
 
+            if (it == null || it.isEmpty() || it.isNullOrEmpty()) {
+                startActivity(
+                    Intent(
+                        this,
+                        MainActivity::class.java
+                    )
+                )
+                finish()
+            }
             adapter = CustomAdapter(
                 this,
                 it
@@ -42,6 +53,15 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
             recycylerView.adapter = adapter
             adapter.notifyDataSetChanged()
         })
+    }
+
+    private fun setFloatButton() {
+        val fab: FloatingActionButton = findViewById(R.id.fab_add)
+
+        fab.setOnClickListener {
+            val intent = Intent(this, CadastroGrupoActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun loadUserLogged() {

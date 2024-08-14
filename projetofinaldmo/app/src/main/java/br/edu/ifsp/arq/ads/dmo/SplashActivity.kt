@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
                  intent = Intent(this, TelaInicialActivity::class.java)
 
             }else{
-                intent = Intent(this, MainActivity::class.java)
+                intent = Intent(this, ListaGruposActivity::class.java)
             }
 
             val handler = Handler()

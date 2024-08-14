@@ -28,4 +28,6 @@ class GrupoViewModel  (application: Application) : AndroidViewModel(application)
 
     fun loadGrupoImage(grupoId: String, imageView: ImageView) = grupoReposiory.loadGrupo(grupoId, imageView)
 
+    fun getGrupo(grupoId: String) = grupoReposiory.getGrupo(grupoId)
+
 }

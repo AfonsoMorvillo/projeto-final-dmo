@@ -2,16 +2,21 @@ package br.edu.ifsp.arq.ads.dmo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.model.User
+import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.PostagemViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClickListener {
@@ -20,10 +25,12 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     private lateinit var recyclerView: RecyclerView
 
     private val postagemViewModel by viewModels<PostagemViewModel>()
-    private val userViewModel by viewModels<UserViewModel>()
+    private val grupoViewModel by viewModels<GrupoViewModel>()
 
     lateinit var user: User
+
     var grupoId: String? = null
+    lateinit var grupo: Grupo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +41,22 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
 
         recyclerView = findViewById(R.id.recyclerViewPostagens)
 
+        grupoViewModel.getGrupo(grupoId!!).observe(this, Observer {
+            grupo =  it
+            setComponents()
+        })
+
         setAdapter()
         setFloatButton()
     }
 
+    private fun setComponents(){
+        val nomeGrupo = findViewById<TextView>(R.id.textView)
+        val percentual = findViewById<TextView>(R.id.textViewPercentual)
+
+        nomeGrupo.text = grupo.nome
+        percentual.text = grupo.calculaPercentual().toString() + "%"
+    }
     private fun setAdapter() {
         adapter = PostagemAdapter(this, emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this)
