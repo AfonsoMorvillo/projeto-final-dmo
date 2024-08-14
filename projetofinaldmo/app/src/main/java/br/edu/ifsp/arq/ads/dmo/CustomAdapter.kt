@@ -26,7 +26,7 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         val grupo = grupos[i]
         viewHolder.itemTitle.text = grupo.nome
-        viewHolder.progressBar.progress = 80
+        viewHolder.progressBar.progress = grupo.calculaPercentual()
 
         if (grupo.foto.isNotEmpty()) {
             Glide.with(viewHolder.itemImage.context)

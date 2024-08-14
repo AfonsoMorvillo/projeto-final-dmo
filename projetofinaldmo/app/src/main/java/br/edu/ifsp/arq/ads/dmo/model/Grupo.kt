@@ -11,7 +11,9 @@ data class Grupo(
     var dataFinal: String = "",
     var foto: String = "",
     var tipoMaterial: TipoMaterial? = TipoMaterial.LATA,
-    var memberIds: List<String> = emptyList()
+    var memberIds: List<String> = emptyList(),
+    var meta: Int? = 0,
+    var quantidadeAtual: Int? =0
 ) : Serializable {
 
     constructor() : this(
@@ -22,7 +24,9 @@ data class Grupo(
         "",
         "",
         TipoMaterial.LATA,
-        emptyList()
+        emptyList(),
+        0,
+        0
     )
 
     enum class TipoMaterial(val value: String) {
@@ -30,5 +34,16 @@ data class Grupo(
         PAPEL("Papel"),
         VIDRO("Vidro"),
         LACRE("Lacre")
+    }
+
+    fun calculaPercentual(): Int {
+        val percentualProgresso = if (this.meta!!.compareTo(0) > 0) {
+            val calculoPercentual = (this.quantidadeAtual!!.toFloat() / this.meta!!.toFloat()) * 100
+            calculoPercentual.coerceAtMost(100f)
+        } else {
+            0f
+        }
+
+        return percentualProgresso.toInt()
     }
 }

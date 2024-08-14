@@ -3,6 +3,7 @@ package br.edu.ifsp.arq.ads.dmo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
@@ -33,6 +34,8 @@ class PostagemActivity : AppCompatActivity() {
     fun setComponents(){
 
         val imagem = findViewById<ImageView>(R.id.item_image)
+        val usuario = findViewById<TextView>(R.id.item_usuario)
+        val titulo =findViewById<TextView>(R.id.item_title)
 
         if (postagem.foto.isNotEmpty()) {
             Glide.with(this)
@@ -44,5 +47,8 @@ class PostagemActivity : AppCompatActivity() {
         } else {
             imagem.setImageResource(R.drawable.menu_vazio)
         }
+
+        usuario.text = postagem.nomeUsuario
+        titulo.text = postagem.nome
     }
 }

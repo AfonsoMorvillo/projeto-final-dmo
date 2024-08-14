@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -12,18 +11,12 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
 
 class CadastroGrupoActivity : AppCompatActivity() {
@@ -31,6 +24,7 @@ class CadastroGrupoActivity : AppCompatActivity() {
     lateinit var txtNome: TextInputEditText
     lateinit var txtDescricao: TextInputEditText
     lateinit var txtDataFinal: TextInputEditText
+    lateinit var txtMeta: TextInputEditText
     lateinit var autoCompleteTipo: AutoCompleteTextView
     lateinit var btnSave: Button
 
@@ -63,6 +57,7 @@ class CadastroGrupoActivity : AppCompatActivity() {
         txtNome = findViewById<TextInputEditText>(R.id.editTextNome)
         txtDescricao = findViewById<TextInputEditText>(R.id.editTextDescricao)
         txtDataFinal = findViewById<TextInputEditText>(R.id.editTextDataFinal)
+        txtMeta = findViewById<TextInputEditText>(R.id.editTextMeta)
         autoCompleteTipo = findViewById<AutoCompleteTextView>(R.id.complete_tipo)
         btnSave = findViewById<Button>(R.id.btn_criar_grupo)
 
@@ -125,6 +120,8 @@ class CadastroGrupoActivity : AppCompatActivity() {
             val id = UUID.randomUUID().toString();
             val tipoMaterialText = autoCompleteTipo.text.toString()
             val tipoMaterial = Grupo.TipoMaterial.values().find { it.value == tipoMaterialText }
+            val metaText = txtMeta.text.toString()
+            val metaNumber: Int? = metaText.toIntOrNull()
 
             val grupo = Grupo(
                 id,
@@ -134,7 +131,9 @@ class CadastroGrupoActivity : AppCompatActivity() {
                 txtDataFinal.text.toString(),
                 "",
                 tipoMaterial,
-                memberIds = listOf(user.id)
+                memberIds = listOf(user.id),
+                metaNumber,
+                0
             )
 
             if (imageUri != null) {
@@ -185,6 +184,13 @@ class CadastroGrupoActivity : AppCompatActivity() {
             isValid = false
         } else {
             autoCompleteTipo.error = null
+        }
+
+        if (txtMeta.text.toString().trim { it <= ' ' }.isEmpty()) {
+            txtMeta.error = "Preencha a quantidade."
+            isValid = false
+        } else {
+            txtMeta.error = null
         }
 
         return isValid

@@ -3,7 +3,6 @@ package br.edu.ifsp.arq.ads.dmo.repository
 import android.app.Application
 import android.net.Uri
 import android.preference.PreferenceManager
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
@@ -16,9 +15,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import java.util.UUID
 
 
 class GrupoRepository (application: Application) {
@@ -109,5 +106,31 @@ class GrupoRepository (application: Application) {
                 .placeholder(R.drawable.menu_vazio)
                 .into(imageView)
         }
+
+
+    fun getGrupo(grupoId: String): MutableLiveData<Grupo> {
+        val liveData = MutableLiveData<Grupo>()
+
+        if (grupoId.isNullOrEmpty()) {
+            liveData.value = null
+            return liveData
+        }
+
+        firestore.collection("grupo").document(grupoId).get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val grupo = document.toObject(Grupo::class.java)
+                    grupo?.id = document.id
+                    liveData.value = grupo
+                } else {
+                    liveData.value = null
+                }
+            }
+            .addOnFailureListener { exception ->
+                liveData.value = null
+            }
+
+        return liveData
+    }
 
 }

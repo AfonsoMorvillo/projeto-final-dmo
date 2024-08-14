@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,11 +16,26 @@ class PostagemRepository (application: Application) {
     fun insert(postagem: Postagem?) {
         firestore.collection("postagem").add(postagem!!)
             .addOnSuccessListener { unused: DocumentReference? ->
+
+                val grupoRef = firestore.collection("grupo").document(postagem.grupoId)
+
+                firestore.runTransaction { transaction ->
+                    val grupoSnapshot = transaction.get(grupoRef)
+                    val grupo = grupoSnapshot.toObject(Grupo::class.java)
+
+                    if (grupo != null) {
+                        grupo.quantidadeAtual = grupo.quantidadeAtual?.plus(postagem.quantidade!!)
+                        transaction.set(grupoRef, grupo)
+                    }
+                }
+
                 Log.d(
                     this.toString(),
                     "Postagem publicada com sucesso."
                 )
             }
+
+
     }
 
     fun update(postagem: Postagem) {
@@ -81,7 +97,24 @@ class PostagemRepository (application: Application) {
                     if (document != null && document.exists()) {
                         val post = document.toObject(Postagem::class.java)
                         post?.id = document.id
-                        liveData.value = post
+
+
+                        firestore.collection("user").document(post?.userId ?: "")
+                            .get()
+                            .addOnCompleteListener { userTask ->
+                                if (userTask.isSuccessful) {
+                                    val user = userTask.result
+                                    if (user != null && user.exists()) {
+                                        val userName = user.getString("name")
+                                        post?.nomeUsuario = userName ?: ""
+                                        liveData.value = post
+                                    } else {
+                                        liveData.value = post
+                                    }
+                                } else {
+                                    liveData.value = post
+                                }
+                            }
                     } else {
                         liveData.value = null
                     }

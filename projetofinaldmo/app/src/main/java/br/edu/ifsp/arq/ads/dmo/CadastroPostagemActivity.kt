@@ -91,6 +91,8 @@ class CadastroPostagemActivity : AppCompatActivity() {
         if (validate()) {
             val storageReference = FirebaseStorage.getInstance().reference
             val imageRef = storageReference.child("images/${UUID.randomUUID()}.jpg")
+            val quantidade = txtQuantidade.text.toString()
+            val quantidadeNumber: Int? = quantidade.toIntOrNull()
 
             if (imageUri != null) {
                 imageRef.putFile(imageUri!!)
@@ -101,7 +103,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
                                 user.id,
                                 txtTitulo.text.toString(),
                                 txtDescricao.text.toString(),
-                                txtQuantidade.text.toString(),
+                                quantidadeNumber,
                                 uri.toString(), // URL da imagem salva no Firebase Storage
                                 txtData.text.toString(),
                                 grupoId
@@ -126,7 +128,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
                     user.id,
                     txtTitulo.text.toString(),
                     txtDescricao.text.toString(),
-                    txtQuantidade.text.toString(),
+                    quantidadeNumber,
                     "", // Sem URL da imagem
                     txtData.text.toString(),
                     grupoId
