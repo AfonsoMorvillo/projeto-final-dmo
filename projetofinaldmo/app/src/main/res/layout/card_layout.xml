@@ -9,14 +9,13 @@
     card_view:cardCornerRadius="20dp"
     card_view:cardElevation="6dp"
     card_view:contentPadding="4dp"
-    card_view:cardUseCompatPadding="true"
-    >
+    card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        >
+        android:padding="16dp">
+
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -37,19 +36,18 @@
             android:layout_toEndOf="@id/item_image"
             android:layout_toRightOf="@id/item_image"
             android:layout_alignParentTop="true"
-            android:textSize="30sp"/>
+            android:textSize="30sp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-
             android:layout_below="@id/item_title"
             android:layout_toEndOf="@id/item_image"
             android:layout_toRightOf="@id/item_image"
-
-
             android:indeterminate="false"
             android:progress="50"
             android:progressDrawable="@drawable/custom_progress_bar" />
