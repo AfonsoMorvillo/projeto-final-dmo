@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 class PostagemAdapter(private val listener: OnItemClickListener, private var postagens: List<Postagem>) : RecyclerView.Adapter<PostagemAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(postagemId: String)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
@@ -47,7 +47,7 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
         }
 
         viewHolder.itemView.setOnClickListener {
-            listener.onItemClick(i)
+            listener.onItemClick(postagem.id)
         }
     }
 
@@ -62,7 +62,10 @@ class PostagemAdapter(private val listener: OnItemClickListener, private var pos
 
         init {
             itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(postagens[position].id)
+                }
             }
         }
     }

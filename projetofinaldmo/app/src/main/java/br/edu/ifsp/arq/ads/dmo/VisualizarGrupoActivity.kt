@@ -71,9 +71,9 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
         private const val REQUEST_CODE_ADD_POST = 1
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(postagemId: String) {
         val intent = Intent(this, PostagemActivity::class.java)
-        //intent.putExtra("POST_ID", post)
+        intent.putExtra("POST_ID", postagemId)
         startActivity(intent)
     }
 }
