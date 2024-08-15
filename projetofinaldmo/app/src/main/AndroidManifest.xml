@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +17,34 @@
         android:theme="@style/Theme.Projetofinaldmo"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".PostagemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CadastroPostagemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VisualizarGrupoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListaGruposActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JuntarGrupoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CadastroGrupoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CadastroContaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TelaInicialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +52,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="br.edu.ifsp.arq.ads.dmo.projetofinaldmo.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
