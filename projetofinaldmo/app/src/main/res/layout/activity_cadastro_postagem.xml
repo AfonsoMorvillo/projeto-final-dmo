@@ -109,26 +109,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
-        android:hint="Data"
-        app:hintTextColor="@color/white"
-        style="@style/LoginTextInputLayoutStyle"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:maxLines="1"
-            android:inputType="date"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_height="wrap_content"
         android:hint="Quantidade"
         app:hintTextColor="@color/white"
         style="@style/LoginTextInputLayoutStyle"

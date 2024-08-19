@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
+import br.edu.ifsp.arq.ads.dmo.utils.formatTimestamp
 import br.edu.ifsp.arq.ads.dmo.viewmodel.PostagemViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
@@ -36,6 +37,8 @@ class PostagemActivity : AppCompatActivity() {
         val imagem = findViewById<ImageView>(R.id.item_image)
         val usuario = findViewById<TextView>(R.id.item_usuario)
         val titulo =findViewById<TextView>(R.id.item_title)
+        val data = findViewById<TextView>(R.id.item_data)
+        val descricao =findViewById<TextView>(R.id.item_descricao)
 
         if (postagem.foto.isNotEmpty()) {
             Glide.with(this)
@@ -50,5 +53,7 @@ class PostagemActivity : AppCompatActivity() {
 
         usuario.text = postagem.nomeUsuario
         titulo.text = postagem.nome
+        data.text = formatTimestamp(postagem.data)
+        descricao.text = postagem.descricao
     }
 }

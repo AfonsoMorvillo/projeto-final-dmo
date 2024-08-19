@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Collections
 
 class PostagemRepository (application: Application) {
 
@@ -67,20 +69,60 @@ class PostagemRepository (application: Application) {
             return liveData
         }
 
-        firestore.collection("postagem").whereEqualTo("grupoId", groupoId).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (doc in task.result) {
-                        val post = doc.toObject(Postagem::class.java)
-                        post.id = doc.id
-                        postagens.add(post)
+        // Primeiro, obtenha todas as postagens para o grupo especificado
+        firestore.collection("postagem")
+            .whereEqualTo("grupoId", groupoId)
+            .get()
+            .addOnCompleteListener { postTask ->
+                if (postTask.isSuccessful) {
+                    val posts = postTask.result
+                    if (posts != null) {
+                        val userIds = mutableSetOf<String>()
+
+                        for (doc in posts) {
+                            val post = doc.toObject(Postagem::class.java)
+                            post.id = doc.id
+                            postagens.add(post)
+                            userIds.add(post.userId)
+                        }
+
+                        // Em seguida, busque todos os usuários que correspondem aos IDs coletados
+                        firestore.collection("user")
+                            .whereIn(FieldPath.documentId(), userIds.toList())
+                            .get()
+                            .addOnCompleteListener { userTask ->
+                                if (userTask.isSuccessful) {
+                                    val userDocuments = userTask.result
+                                    val userMap = mutableMapOf<String, String>()
+
+                                    for (userDoc in userDocuments!!) {
+                                        val userName = userDoc.getString("name")
+                                        val userId = userDoc.id
+                                        userMap[userId] = userName ?: ""
+                                    }
+
+                                    // Associe os nomes dos usuários às postagens
+                                    for (post in postagens) {
+                                        post.nomeUsuario = userMap[post.userId] ?: ""
+                                    }
+
+                                    // Ordene as postagens por data
+                                    postagens.sortByDescending { it.data }
+                                    liveData.value = postagens
+                                } else {
+                                    // Caso a busca dos usuários falhe, ainda envie as postagens
+                                    liveData.value = postagens
+                                }
+                            }
                     }
+                } else {
+                    liveData.value = postagens
                 }
-                liveData.setValue(postagens)
             }
 
         return liveData
     }
+
 
     fun getPost(postId: String?): LiveData<Postagem> {
         val liveData = MutableLiveData<Postagem>()

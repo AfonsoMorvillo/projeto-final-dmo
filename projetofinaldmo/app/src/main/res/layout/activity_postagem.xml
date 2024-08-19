@@ -21,13 +21,22 @@
 
     <!-- TextView para o nome do usuário -->
     <TextView
+        android:paddingTop="10dp"
         android:id="@+id/item_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="1dp"
         android:fontFamily="@font/poppins"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/item_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
 
     <!-- TextView para o título da postagem -->
     <TextView
@@ -37,8 +46,13 @@
         android:textColor="@android:color/white"
         android:fontFamily="@font/poppins"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:typeface="monospace" />
+        android:textStyle="bold" />
 
-
+    <TextView
+        android:id="@+id/item_descricao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/poppins"
+        android:textSize="16sp" />
 </LinearLayout>
