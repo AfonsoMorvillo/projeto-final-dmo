@@ -1,6 +1,7 @@
 package br.edu.ifsp.arq.ads.dmo
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -18,6 +19,9 @@ import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import java.util.UUID
 
 class CadastroGrupoActivity : AppCompatActivity() {
@@ -41,6 +45,9 @@ class CadastroGrupoActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
 
     private val PICK_IMAGE_REQUEST = 1
+
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,13 +75,41 @@ class CadastroGrupoActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
+        // Configura o DatePicker para o campo de data
+        txtDataFinal.setOnClickListener {
+            showDatePickerDialog()
+        }
     }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            R.style.CustomDatePickerDialogTheme, // Aplicar o tema personalizado
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = Calendar.getInstance().apply {
+                    set(selectedYear, selectedMonth, selectedDay)
+                }.time
+                txtDataFinal.setText(dateFormat.format(selectedDate))
+            },
+            year,
+            month,
+            day
+        )
+
+        datePickerDialog.show()
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             imageUri = data.data
-           // imageView.setImageURI(imageUri)
+            // imageView.setImageURI(imageUri)
         }
     }
     private fun setSelectTipo() {
