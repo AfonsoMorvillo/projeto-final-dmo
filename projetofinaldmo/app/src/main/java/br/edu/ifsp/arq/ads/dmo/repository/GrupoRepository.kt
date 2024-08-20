@@ -18,16 +18,13 @@ import com.google.firebase.ktx.app
 import com.google.firebase.storage.ktx.storage
 
 
-class GrupoRepository (application: Application) {
+class GrupoRepository(application: Application) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
     private val glide = Glide.with(application)
 
     private val storage = Firebase.storage(Firebase.app)
-
-    private val preference = PreferenceManager.getDefaultSharedPreferences(application)
-
 
     fun insert(grupo: Grupo?) {
         firestore.collection("grupo").add(grupo!!)
@@ -83,29 +80,30 @@ class GrupoRepository (application: Application) {
         return liveData
     }
 
-    fun uploadGrupoImagem(grupoId: String, imageUri: Uri) : LiveData<String> {
+    fun uploadGrupoImagem(grupoId: String, imageUri: Uri): LiveData<String> {
 
         val liveData = MutableLiveData<String>()
 
         val imageRef = storage.reference.child("grupos/${grupoId}.jpg")
 
-        imageRef.putFile(imageUri).addOnSuccessListener { taskSnapshot->
+        imageRef.putFile(imageUri).addOnSuccessListener { taskSnapshot ->
             imageRef.downloadUrl.addOnSuccessListener {
-                liveData.value =  it.toString();
+                liveData.value = it.toString();
             }
         }
 
         return liveData
     }
 
-    fun loadGrupo(grupoId: String, imageView: ImageView) = storage.reference.child("grupos/$grupoId/profile.jpg")
-        .downloadUrl.addOnSuccessListener {
-            glide.load(it)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.menu_vazio)
-                .placeholder(R.drawable.menu_vazio)
-                .into(imageView)
-        }
+    fun loadGrupo(grupoId: String, imageView: ImageView) =
+        storage.reference.child("grupos/$grupoId/profile.jpg")
+            .downloadUrl.addOnSuccessListener {
+                glide.load(it)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error(R.drawable.menu_vazio)
+                    .placeholder(R.drawable.menu_vazio)
+                    .into(imageView)
+            }
 
 
     fun getGrupo(grupoId: String): MutableLiveData<Grupo> {
@@ -133,4 +131,42 @@ class GrupoRepository (application: Application) {
         return liveData
     }
 
+    fun juntarSeGrupo(grupoId: String, userId: String): LiveData<Boolean> {
+        val liveData = MutableLiveData<Boolean>()
+
+        firestore.collection("grupo").document(grupoId).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val grupo = document.toObject(Grupo::class.java)
+                    if (grupo != null) {
+                        val membros = grupo.memberIds.toMutableList()
+                        if (!membros.contains(userId)) {
+                            membros.add(userId)
+                            firestore.collection("grupo").document(grupoId)
+                                .update("memberIds", membros)
+                                .addOnSuccessListener {
+                                    liveData.value = true
+                                    Log.d("GrupoRepository", "Usuário adicionado ao grupo com sucesso.")
+                                }
+                                .addOnFailureListener {
+                                    liveData.value = false
+                                    Log.d("GrupoRepository", "Falha ao adicionar usuário ao grupo: $it")
+                                }
+                        } else {
+                            liveData.value = false
+                            Log.d("GrupoRepository", "Usuário já está no grupo.")
+                        }
+                    }
+                } else {
+                    liveData.value = false
+                    Log.d("GrupoRepository", "Grupo não encontrado.")
+                }
+            }
+            .addOnFailureListener {
+                liveData.value = false
+                Log.d("GrupoRepository", "Falha ao carregar grupo: $it")
+            }
+
+        return liveData
+    }
 }

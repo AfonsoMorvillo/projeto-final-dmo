@@ -86,7 +86,10 @@ class PostagemRepository (application: Application) {
                             userIds.add(post.userId)
                         }
 
-                        // Em seguida, busque todos os usuários que correspondem aos IDs coletados
+                        if (userIds.isNotEmpty()){
+
+
+
                         firestore.collection("user")
                             .whereIn(FieldPath.documentId(), userIds.toList())
                             .get()
@@ -114,6 +117,7 @@ class PostagemRepository (application: Application) {
                                     liveData.value = postagens
                                 }
                             }
+                        }
                     }
                 } else {
                     liveData.value = postagens

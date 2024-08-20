@@ -1,0 +1,9 @@
+<!-- res/menu/menu_fab.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_add_group"
+        android:title="Criar" />
+    <item
+        android:id="@+id/action_view_groups"
+        android:title="Juntar-se" />
+</menu>
