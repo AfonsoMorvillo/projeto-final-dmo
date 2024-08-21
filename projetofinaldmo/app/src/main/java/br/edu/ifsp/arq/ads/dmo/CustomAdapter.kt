@@ -11,6 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 class CustomAdapter(private val listener: OnItemClickListener, private var grupos: List<Grupo>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -24,8 +26,11 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
+        val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
+
         val grupo = grupos[i]
         viewHolder.itemTitle.text = grupo.nome
+        viewHolder.itemMeta.text =  "${numberFormat.format(grupo.quantidadeAtual)} / ${numberFormat.format(grupo.meta)}"
         viewHolder.progressBar.progress = grupo.calculaPercentual()
 
         if (grupo.foto.isNotEmpty()) {
@@ -52,6 +57,7 @@ class CustomAdapter(private val listener: OnItemClickListener, private var grupo
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemImage: ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
+        var itemMeta: TextView = itemView.findViewById(R.id.item_meta)
         var progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
 
         init {

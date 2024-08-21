@@ -1,7 +1,7 @@
 package br.edu.ifsp.arq.ads.dmo
 
-import android.content.ClipboardManager
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,13 +15,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
-import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.GrupoViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.PostagemViewModel
-import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
-import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.NumberFormat
+import java.util.Locale
 
 class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClickListener {
 
@@ -59,11 +58,19 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     }
 
     private fun setComponents() {
+        val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
+
         val nomeGrupo = findViewById<TextView>(R.id.textView)
-        val percentual = findViewById<TextView>(R.id.textViewPercentual)
+
+        val meta = findViewById<TextView>(R.id.txtMeta)
+        val coletado = findViewById<TextView>(R.id.txtColetado)
+        val material = findViewById<TextView>(R.id.txtMaterial)
+
 
         nomeGrupo.text = grupo.nome
-        percentual.text = grupo.calculaPercentual().toString() + "%"
+        meta.text = numberFormat.format(grupo.meta)
+        coletado.text = numberFormat.format(grupo.quantidadeAtual)
+        material.text = grupo.tipoMaterial!!.value
     }
 
     private fun setAdapter() {

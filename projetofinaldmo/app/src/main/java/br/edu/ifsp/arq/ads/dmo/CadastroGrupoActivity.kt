@@ -6,9 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +36,8 @@ class CadastroGrupoActivity : AppCompatActivity() {
     lateinit var autoCompleteTipo: AutoCompleteTextView
     lateinit var btnSave: Button
     lateinit var loading: DialogLoading
+
+    lateinit var imageView: ImageView
 
     private val userViewModel by viewModels<UserViewModel>()
     private val grupoViewModel by viewModels<GrupoViewModel>()
@@ -69,16 +74,23 @@ class CadastroGrupoActivity : AppCompatActivity() {
         txtMeta = findViewById<TextInputEditText>(R.id.editTextMeta)
         autoCompleteTipo = findViewById<AutoCompleteTextView>(R.id.complete_tipo)
         btnSave = findViewById<Button>(R.id.btn_criar_grupo)
+        imageView = findViewById(R.id.imageViewGrupo)
 
-        adicionarImagem = findViewById(R.id.btn_adicionar_imagem)
-        adicionarImagem.setOnClickListener{
+        val textViewAdicionarImagem: TextView = findViewById(R.id.textViewAdicionarImagemGrupo)
+        textViewAdicionarImagem.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
+
         // Configura o DatePicker para o campo de data
         txtDataFinal.setOnClickListener {
             showDatePickerDialog()
         }
+    }
+
+    fun selecionarImagem(view: View) {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
     private fun showDatePickerDialog() {
@@ -109,7 +121,7 @@ class CadastroGrupoActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             imageUri = data.data
-            // imageView.setImageURI(imageUri)
+            imageView.setImageURI(imageUri)
         }
     }
     private fun setSelectTipo() {

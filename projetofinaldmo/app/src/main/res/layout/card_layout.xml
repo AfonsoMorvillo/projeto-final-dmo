@@ -14,7 +14,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="2dp"
+        >
 
         <ImageView
             android:layout_width="100dp"
@@ -40,12 +44,31 @@
             android:ellipsize="end"
             android:maxLines="1"/>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meta"
+            android:id="@+id/item_meta"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins"
+            android:layout_below="@id/item_title"
+            android:layout_toEndOf="@id/item_image"
+            android:layout_toRightOf="@id/item_image"
+            android:textSize="12sp"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_below="@id/item_title"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_meta"
+
             android:layout_toEndOf="@id/item_image"
             android:layout_toRightOf="@id/item_image"
             android:indeterminate="false"
