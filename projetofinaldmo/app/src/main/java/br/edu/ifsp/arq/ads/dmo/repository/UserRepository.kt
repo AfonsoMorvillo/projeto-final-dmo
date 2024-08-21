@@ -23,52 +23,56 @@ class UserRepository (application: Application) {
 
     private val preference = PreferenceManager.getDefaultSharedPreferences(application)
 
-    fun login(email: String, password: String) : LiveData<User> {
-        val liveData = MutableLiveData<User>(null)
+        fun login(email: String, password: String) : LiveData<User> {
+            println("executando login")
+            val liveData = MutableLiveData<User>(null)
 
-        val params = JSONObject().also {
-            it.put("email", email)
-            it.put("password", password)
-            it.put("returnSecureToken", true)
+            val params = JSONObject().also {
+                it.put("email", email)
+                it.put("password", password)
+                it.put("returnSecureToken", true)
+            }
+
+            val request = JsonObjectRequest(
+                Request.Method.POST
+                , BASE_URL + SIGNIN + KEY
+                , params
+                , Response.Listener { response ->
+                    val localId = response.getString("localId")
+                    val idToken = response.getString("idToken")
+
+                    firestore.collection("user")
+                        .document(localId).get().addOnSuccessListener {
+                            val user = it.toObject(User::class.java)
+                            user?.id = localId
+                            user?.password = idToken
+
+                            liveData.value = user
+
+                            println("id do login")
+                            println(localId)
+
+                            preference.edit().putString(UserViewModel.USER_ID, localId).apply()
+
+                            firestore.collection("user")
+                                .document(localId).set(user!!)
+                        }
+                }
+                , Response.ErrorListener { error ->
+                    val user = User()
+                    user?.id = "ERRO"
+
+                    liveData.value = user
+                    Log.e(this.toString(), error.message ?: "Error")
+                }
+            )
+
+            queue.add(request)
+
+            return liveData
         }
 
-        val request = JsonObjectRequest(
-            Request.Method.POST
-            , BASE_URL + SIGNIN + KEY
-            , params
-            , Response.Listener { response ->
-                val localId = response.getString("localId")
-                val idToken = response.getString("idToken")
-
-                firestore.collection("user")
-                    .document(localId).get().addOnSuccessListener {
-                        val user = it.toObject(User::class.java)
-                        user?.id = localId
-                        user?.password = idToken
-
-                        liveData.value = user
-
-                        preference.edit().putString(UserViewModel.USER_ID, localId).apply()
-
-                        firestore.collection("user")
-                            .document(localId).set(user!!)
-                    }
-            }
-            , Response.ErrorListener { error ->
-                val user = User()
-                user?.id = "ERRO"
-
-                liveData.value = user
-                Log.e(this.toString(), error.message ?: "Error")
-            }
-        )
-
-        queue.add(request)
-
-        return liveData
-    }
-
-    fun createUser(user: User) {
+    fun createUser(user: User, onSuccess: () -> Unit) {
 
         val params = JSONObject().also {
             it.put("email", user.email)
@@ -82,10 +86,13 @@ class UserRepository (application: Application) {
             , Response.Listener { response ->
                 user.id = response.getString("localId")
                 user.password = response.getString("idToken")
+                println(user.id)
 
                 firestore.collection("user")
                     .document(user.id).set(user).addOnSuccessListener {
                         Log.d(this.toString(), "Usuário ${user.email} cadastrado com sucesso.")
+                        preference.edit().putString(UserViewModel.USER_ID, user.id).apply()
+                        onSuccess() // Notifica que a criação foi bem-sucedida
                     }
             }
             , Response.ErrorListener { error ->
@@ -95,6 +102,7 @@ class UserRepository (application: Application) {
 
         queue.add(request)
     }
+
 
     fun load(userId: String) : LiveData<User> {
         val liveData = MutableLiveData<User>()

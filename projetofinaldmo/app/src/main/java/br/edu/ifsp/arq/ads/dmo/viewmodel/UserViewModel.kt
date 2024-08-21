@@ -13,7 +13,13 @@ class UserViewModel (application: Application) : AndroidViewModel(application) {
 
     private val usersRepository = UserRepository(getApplication())
 
-    fun createUser(user: User) = usersRepository.createUser(user)
+    fun createUser(user: User): LiveData<Boolean> {
+        val liveData = MutableLiveData<Boolean>()
+        usersRepository.createUser(user) {
+            liveData.value = true
+        }
+        return liveData
+    }
 
     fun updateUser(user: User) = usersRepository.update(user)
 

@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            val intent = Intent(this, MainActivity::class.java)
+                            val intent = Intent(this, ListaGruposActivity::class.java)
                             startActivity(intent)
                             finish()
                         }

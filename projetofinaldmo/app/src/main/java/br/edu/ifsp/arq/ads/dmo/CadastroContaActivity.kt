@@ -3,11 +3,13 @@ package br.edu.ifsp.arq.ads.dmo
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import br.edu.ifsp.arq.ads.dmo.dialog.DialogLoading
 import br.edu.ifsp.arq.ads.dmo.model.User
 
 class CadastroContaActivity : AppCompatActivity() {
@@ -16,6 +18,7 @@ class CadastroContaActivity : AppCompatActivity() {
     lateinit var edtEmail: TextInputEditText
     lateinit var edtPassword: TextInputEditText
 
+    lateinit var loading: DialogLoading
 
     private val userViewModel by viewModels<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +28,8 @@ class CadastroContaActivity : AppCompatActivity() {
         edtName = findViewById(R.id.editTextNome)
         edtEmail = findViewById(R.id.editTextEmail)
         edtPassword = findViewById(R.id.editTextSenha)
+
+        loading = DialogLoading(this)
 
         val btnCriarConta = findViewById<MaterialButton>(R.id.btn_criar_conta)
 
@@ -38,11 +43,21 @@ class CadastroContaActivity : AppCompatActivity() {
                     image = "",
                     dateOfBirth = "",
                 )
-                userViewModel.createUser(user)
-                userViewModel.login(user.email, user.password).observe(this, Observer {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+
+                loading.showDialog("Cadastrando...")
+
+                userViewModel.createUser(user).observe(this, Observer { isCreated ->
+                    if (isCreated) {
+                        loading.hideDialog()
+                        val intent = Intent(this, ListaGruposActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        // Tratar erro de criação
+                        loading.hideDialog()
+                        Toast.makeText(this, "Erro ao criar usuário", Toast.LENGTH_SHORT).show()
+                    }
                 })
+
             }
 
         }

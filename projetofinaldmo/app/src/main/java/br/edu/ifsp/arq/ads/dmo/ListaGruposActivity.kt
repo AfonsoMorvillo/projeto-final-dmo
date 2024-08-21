@@ -2,7 +2,9 @@ package br.edu.ifsp.arq.ads.dmo
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -29,24 +31,33 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
         supportActionBar?.hide()
         setContentView(R.layout.activity_lista_grupos)
 
-        recyclerView = findViewById(R.id.recyclerView)
         loadUserLogged()
         setFloatButton()
     }
 
     private fun setAdapter() {
-        grupoViewModel.getAllGroups(user.id).observe(this, Observer {
-            if (it.isNullOrEmpty()) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+        grupoViewModel.getAllGroups(user.id).observe(this, Observer { groups ->
+            val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+            val imageEmpty: ImageView = findViewById(R.id.image_empty)
+            val textEmpty: TextView = findViewById(R.id.text_empty)
+
+            if (groups.isNullOrEmpty()) {
+                recyclerView.visibility = View.GONE
+                imageEmpty.visibility = View.VISIBLE
+                textEmpty.visibility = View.VISIBLE
             } else {
-                adapter = CustomAdapter(this, it)
+                recyclerView.visibility = View.VISIBLE
+                imageEmpty.visibility = View.GONE
+                textEmpty.visibility = View.GONE
+
+                adapter = CustomAdapter(this, groups)
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 recyclerView.adapter = adapter
                 adapter.notifyDataSetChanged()
             }
         })
     }
+
 
     private fun setFloatButton() {
         val fab: FloatingActionButton = findViewById(R.id.fab_add)

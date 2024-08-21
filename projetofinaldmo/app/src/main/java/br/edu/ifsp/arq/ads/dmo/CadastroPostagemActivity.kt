@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import br.edu.ifsp.arq.ads.dmo.dialog.DialogLoading
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.PostagemViewModel
@@ -40,6 +41,8 @@ class CadastroPostagemActivity : AppCompatActivity() {
     private val userViewModel by viewModels<UserViewModel>()
     private val postViewModel by viewModels<PostagemViewModel>()
 
+    lateinit var loading: DialogLoading
+
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +53,8 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
         postagem = Postagem()
         postagem.id = "0"
+
+        loading = DialogLoading(this)
 
         setComponents()
         setBtnSave()
@@ -94,6 +99,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
     private fun addPostagem() {
         if (validate()) {
+            loading.showDialog("Publicando...")
             val storageReference = FirebaseStorage.getInstance().reference
             val imageRef = storageReference.child("images/${UUID.randomUUID()}.jpg")
             val quantidade = txtQuantidade.text.toString()
@@ -119,11 +125,13 @@ class CadastroPostagemActivity : AppCompatActivity() {
                                 "Postagem publicada com sucesso!",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            loading.hideDialog()
                             setResult(RESULT_OK)
                             finish()
                         }
                     }
                     .addOnFailureListener {
+                        loading.hideDialog()
                         Toast.makeText(this, "Falha ao carregar a imagem", Toast.LENGTH_SHORT).show()
                     }
             } else {
@@ -144,6 +152,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
                     "Postagem publicada com sucesso!",
                     Toast.LENGTH_SHORT
                 ).show()
+                loading.hideDialog()
                 setResult(RESULT_OK)
                 finish()
             }
