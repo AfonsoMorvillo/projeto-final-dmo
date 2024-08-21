@@ -1,7 +1,11 @@
 package br.edu.ifsp.arq.ads.dmo
 
+import android.content.ClipboardManager
+import android.content.ClipData
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -42,21 +46,26 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
         recyclerView = findViewById(R.id.recyclerViewPostagens)
 
         grupoViewModel.getGrupo(grupoId!!).observe(this, Observer {
-            grupo =  it
+            grupo = it
             setComponents()
         })
 
         setAdapter()
         setFloatButton()
+
+        // Configurar o clique no ícone
+        val iconView: ImageView = findViewById(R.id.iconView)
+        iconView.setOnClickListener { view -> onIconClick(view) }
     }
 
-    private fun setComponents(){
+    private fun setComponents() {
         val nomeGrupo = findViewById<TextView>(R.id.textView)
         val percentual = findViewById<TextView>(R.id.textViewPercentual)
 
         nomeGrupo.text = grupo.nome
         percentual.text = grupo.calculaPercentual().toString() + "%"
     }
+
     private fun setAdapter() {
         adapter = PostagemAdapter(this, emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -94,5 +103,19 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
         val intent = Intent(this, PostagemActivity::class.java)
         intent.putExtra("POST_ID", postagemId)
         startActivity(intent)
+    }
+
+    fun onIconClick(view: View) {
+        // Obtém o ClipboardManager
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        // Cria um ClipData com o ID do grupo
+        val clip = ClipData.newPlainText("Group ID", grupoId)
+
+        // Adiciona o ClipData ao ClipboardManager
+        clipboard.setPrimaryClip(clip)
+
+        // Mostra uma mensagem de confirmação
+        Toast.makeText(this, "Link do Grupo copiado!", Toast.LENGTH_SHORT).show()
     }
 }
