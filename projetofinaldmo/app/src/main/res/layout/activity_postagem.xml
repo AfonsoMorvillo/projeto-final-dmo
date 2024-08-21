@@ -1,58 +1,76 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/item_image"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitCenter" />
-    </androidx.cardview.widget.CardView>
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
 
-    <!-- TextView para o nome do usuário -->
-    <TextView
-        android:paddingTop="10dp"
-        android:id="@+id/item_usuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:fontFamily="@font/poppins"
-        android:textColor="@android:color/white"
-        android:textSize="16sp" />
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter" />
+        </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/item_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        <!-- Layout para o nome do usuário e a data -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
-    <!-- TextView para o título da postagem -->
-    <TextView
-        android:id="@+id/item_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+            <!-- Nome do usuário -->
+            <TextView
+                android:id="@+id/item_usuario"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/item_descricao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
-        android:textSize="16sp" />
-</LinearLayout>
+            <!-- Data -->
+            <TextView
+                android:id="@+id/item_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/white_gray"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!--  Titulo -->
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/poppins"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Descrição -->
+        <TextView
+            android:id="@+id/item_descricao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/poppins"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+
+</ScrollView>

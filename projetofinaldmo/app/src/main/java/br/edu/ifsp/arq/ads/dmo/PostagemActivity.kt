@@ -54,6 +54,6 @@ class PostagemActivity : AppCompatActivity() {
         usuario.text = postagem.nomeUsuario
         titulo.text = postagem.nome
         data.text = formatTimestamp(postagem.data)
-        descricao.text = postagem.descricao
+        descricao.text = "Descrição: ${postagem.descricao}"
     }
 }
