@@ -58,6 +58,11 @@ class ListaGruposActivity : AppCompatActivity(), CustomAdapter.OnItemClickListen
         })
     }
 
+    fun navigatePerfilActivity(view: View){
+        val intent = Intent(this, PerfilActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private fun setFloatButton() {
         val fab: FloatingActionButton = findViewById(R.id.fab_add)

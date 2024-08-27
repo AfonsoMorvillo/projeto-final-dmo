@@ -3,6 +3,7 @@ package br.edu.ifsp.arq.ads.dmo.viewmodel;
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import br.edu.ifsp.arq.ads.dmo.dto.PostagemDTO
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.repository.PostagemRepository
 
@@ -22,7 +23,7 @@ class PostagemViewModel  (application: Application) : AndroidViewModel(applicati
         postagemRepository.delete(postagem)
     }
 
-    fun getPost(postId: String?): LiveData<Postagem>{
+    fun getPost(postId: String?): LiveData<PostagemDTO>{
        return postagemRepository.getPost(postId)
     }
 

@@ -27,6 +27,10 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     private lateinit var adapter: PostagemAdapter
     private lateinit var recyclerView: RecyclerView
 
+    private lateinit var coletado: TextView
+
+    private lateinit var numberFormat: NumberFormat
+
     private val postagemViewModel by viewModels<PostagemViewModel>()
     private val grupoViewModel by viewModels<GrupoViewModel>()
 
@@ -58,12 +62,12 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     }
 
     private fun setComponents() {
-        val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
+        numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
 
         val nomeGrupo = findViewById<TextView>(R.id.textView)
 
         val meta = findViewById<TextView>(R.id.txtMeta)
-        val coletado = findViewById<TextView>(R.id.txtColetado)
+        coletado = findViewById<TextView>(R.id.txtColetado)
         val material = findViewById<TextView>(R.id.txtMaterial)
 
 
@@ -96,9 +100,12 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_POST && resultCode == RESULT_OK) {
-            postagemViewModel.getAllPosts(grupoId).observe(this, Observer {
-                adapter.updatePostagens(it)
+            postagemViewModel.getAllPosts(grupoId).observe(this, Observer {posts ->
+                adapter.updatePostagens(posts)
+                val totalQuantidade = posts?.sumOf { it.quantidade ?: 0 } ?: 0
+                coletado.text = numberFormat.format(totalQuantidade)
             })
+
         }
     }
 
@@ -113,16 +120,12 @@ class VisualizarGrupoActivity : AppCompatActivity(), PostagemAdapter.OnItemClick
     }
 
     fun onIconClick(view: View) {
-        // Obtém o ClipboardManager
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        // Cria um ClipData com o ID do grupo
         val clip = ClipData.newPlainText("Group ID", grupoId)
 
-        // Adiciona o ClipData ao ClipboardManager
         clipboard.setPrimaryClip(clip)
 
-        // Mostra uma mensagem de confirmação
         Toast.makeText(this, "Link do Grupo copiado!", Toast.LENGTH_SHORT).show()
     }
 }

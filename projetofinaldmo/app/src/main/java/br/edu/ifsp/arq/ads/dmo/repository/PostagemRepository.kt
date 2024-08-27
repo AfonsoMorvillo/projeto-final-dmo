@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.edu.ifsp.arq.ads.dmo.dto.PostagemDTO
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import com.google.firebase.firestore.DocumentReference
@@ -28,6 +29,7 @@ class PostagemRepository (application: Application) {
                     if (grupo != null) {
                         grupo.quantidadeAtual = grupo.quantidadeAtual?.plus(postagem.quantidade!!)
                         transaction.set(grupoRef, grupo)
+                        println("grupo somado")
                     }
                 }
 
@@ -128,8 +130,8 @@ class PostagemRepository (application: Application) {
     }
 
 
-    fun getPost(postId: String?): LiveData<Postagem> {
-        val liveData = MutableLiveData<Postagem>()
+    fun getPost(postId: String?): LiveData<PostagemDTO> {
+        val liveData = MutableLiveData<PostagemDTO>()
 
         if (postId.isNullOrEmpty()) {
             liveData.value = null
@@ -144,6 +146,8 @@ class PostagemRepository (application: Application) {
                         val post = document.toObject(Postagem::class.java)
                         post?.id = document.id
 
+                        // Cria uma nova instância de PostagemDTO
+                        val postagemDTO = PostagemDTO(post ?: Postagem())
 
                         firestore.collection("user").document(post?.userId ?: "")
                             .get()
@@ -152,14 +156,14 @@ class PostagemRepository (application: Application) {
                                     val user = userTask.result
                                     if (user != null && user.exists()) {
                                         val userName = user.getString("name")
+                                        val userImage = user.getString("image")
+                                        postagemDTO.fotoUser = userImage ?: ""
                                         post?.nomeUsuario = userName ?: ""
-                                        liveData.value = post
-                                    } else {
-                                        liveData.value = post
                                     }
-                                } else {
-                                    liveData.value = post
                                 }
+                                // Atualiza o liveData com o PostagemDTO
+                                postagemDTO.postagem = post ?: Postagem()
+                                liveData.value = postagemDTO
                             }
                     } else {
                         liveData.value = null
@@ -171,8 +175,6 @@ class PostagemRepository (application: Application) {
 
         return liveData
     }
-
-
 
 
 }

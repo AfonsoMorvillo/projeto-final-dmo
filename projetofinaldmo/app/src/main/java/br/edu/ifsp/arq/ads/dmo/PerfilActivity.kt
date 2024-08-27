@@ -134,11 +134,21 @@ class PerfilActivity : AppCompatActivity() {
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    fun sair(view: View) {
+
+        userViewModel.logout()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+        startActivity(intent)
+
+        finish()
+    }
+
     fun onClickAtualizarConta() {
 
         if (validate()) {
-
-            println(edtNascimento.text.toString())
+            loading.showDialog("Atualizando...")
             val userSalvar = User(
                 email = user.email,
                 name = edtName.text.toString(),
@@ -167,7 +177,6 @@ class PerfilActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }else{
-                    println("erro")
                 }
                 loading.hideDialog()
             }
