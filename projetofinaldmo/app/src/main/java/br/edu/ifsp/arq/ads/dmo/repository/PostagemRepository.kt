@@ -4,10 +4,13 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.edu.ifsp.arq.ads.dmo.dto.PostagemDTO
 import br.edu.ifsp.arq.ads.dmo.model.Grupo
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Collections
 
 class PostagemRepository (application: Application) {
 
@@ -26,6 +29,7 @@ class PostagemRepository (application: Application) {
                     if (grupo != null) {
                         grupo.quantidadeAtual = grupo.quantidadeAtual?.plus(postagem.quantidade!!)
                         transaction.set(grupoRef, grupo)
+                        println("grupo somado")
                     }
                 }
 
@@ -67,23 +71,67 @@ class PostagemRepository (application: Application) {
             return liveData
         }
 
-        firestore.collection("postagem").whereEqualTo("grupoId", groupoId).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (doc in task.result) {
-                        val post = doc.toObject(Postagem::class.java)
-                        post.id = doc.id
-                        postagens.add(post)
+        // Primeiro, obtenha todas as postagens para o grupo especificado
+        firestore.collection("postagem")
+            .whereEqualTo("grupoId", groupoId)
+            .get()
+            .addOnCompleteListener { postTask ->
+                if (postTask.isSuccessful) {
+                    val posts = postTask.result
+                    if (posts != null) {
+                        val userIds = mutableSetOf<String>()
+
+                        for (doc in posts) {
+                            val post = doc.toObject(Postagem::class.java)
+                            post.id = doc.id
+                            postagens.add(post)
+                            userIds.add(post.userId)
+                        }
+
+                        if (userIds.isNotEmpty()){
+
+
+
+                        firestore.collection("user")
+                            .whereIn(FieldPath.documentId(), userIds.toList())
+                            .get()
+                            .addOnCompleteListener { userTask ->
+                                if (userTask.isSuccessful) {
+                                    val userDocuments = userTask.result
+                                    val userMap = mutableMapOf<String, String>()
+
+                                    for (userDoc in userDocuments!!) {
+                                        val userName = userDoc.getString("name")
+                                        val userId = userDoc.id
+                                        userMap[userId] = userName ?: ""
+                                    }
+
+                                    // Associe os nomes dos usuários às postagens
+                                    for (post in postagens) {
+                                        post.nomeUsuario = userMap[post.userId] ?: ""
+                                    }
+
+                                    // Ordene as postagens por data
+                                    postagens.sortByDescending { it.data }
+                                    liveData.value = postagens
+                                } else {
+                                    // Caso a busca dos usuários falhe, ainda envie as postagens
+                                    liveData.value = postagens
+                                }
+                            }
+                        }
                     }
+                } else {
+                    liveData.value = postagens
                 }
-                liveData.setValue(postagens)
             }
 
         return liveData
     }
 
-    fun getPost(postId: String?): LiveData<Postagem> {
-        val liveData = MutableLiveData<Postagem>()
+
+    fun getPost(postId: String?): LiveData<PostagemDTO> {
+        val liveData = MutableLiveData<PostagemDTO>()
 
         if (postId.isNullOrEmpty()) {
             liveData.value = null
@@ -98,6 +146,8 @@ class PostagemRepository (application: Application) {
                         val post = document.toObject(Postagem::class.java)
                         post?.id = document.id
 
+                        // Cria uma nova instância de PostagemDTO
+                        val postagemDTO = PostagemDTO(post ?: Postagem())
 
                         firestore.collection("user").document(post?.userId ?: "")
                             .get()
@@ -106,14 +156,14 @@ class PostagemRepository (application: Application) {
                                     val user = userTask.result
                                     if (user != null && user.exists()) {
                                         val userName = user.getString("name")
+                                        val userImage = user.getString("image")
+                                        postagemDTO.fotoUser = userImage ?: ""
                                         post?.nomeUsuario = userName ?: ""
-                                        liveData.value = post
-                                    } else {
-                                        liveData.value = post
                                     }
-                                } else {
-                                    liveData.value = post
                                 }
+                                // Atualiza o liveData com o PostagemDTO
+                                postagemDTO.postagem = post ?: Postagem()
+                                liveData.value = postagemDTO
                             }
                     } else {
                         liveData.value = null
@@ -125,8 +175,6 @@ class PostagemRepository (application: Application) {
 
         return liveData
     }
-
-
 
 
 }

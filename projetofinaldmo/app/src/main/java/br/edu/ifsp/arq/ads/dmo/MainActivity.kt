@@ -3,6 +3,8 @@ package br.edu.ifsp.arq.ads.dmo
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.button.MaterialButton
@@ -37,7 +39,15 @@ class MainActivity : AppCompatActivity() {
 
         btnJuntarGrupo.setOnClickListener {
             val intent = Intent(this, JuntarGrupoActivity::class.java)
-            startActivity(intent)
+            joinGroupActivityResultLauncher.launch(intent)
         }
     }
+
+    private val joinGroupActivityResultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val intent = Intent(this, ListaGruposActivity::class.java)
+                startActivity(intent)
+            }
+        }
 }

@@ -67,17 +67,19 @@
         android:layout_height="wrap_content"
         android:hint="Data final"
         app:hintTextColor="@color/white"
-        style="@style/LoginTextInputLayoutStyle"
-        >
+        style="@style/LoginTextInputLayoutStyle">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextDataFinal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:maxLines="1"
-            android:inputType="date"
-            />
+            android:inputType="none"
+            android:focusable="false"
+            android:clickable="true"
+        />
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:paddingTop="10dp"
@@ -124,20 +126,52 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_adicionar_imagem"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+    <LinearLayout
+        android:id="@+id/layoutImagemGrupo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="Adicionar imagem"
-        android:textColor="@color/white"
-        android:textSize="17dp"
-        android:fontFamily="@font/poppins"
-        app:cornerRadius="15dp"
-        android:layout_marginTop="30dp"
-        />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@color/dark_gray_100"
+        android:layout_marginTop="20dp">
+
+        <!-- Imagem -->
+        <ImageView
+            android:id="@+id/imageViewGrupo"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:src="@drawable/menu_vazio"
+            android:scaleType="centerCrop" />
+
+        <!-- Área para adicionar imagem -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="selecionarImagem">
+
+            <!-- Texto e ícone -->
+            <TextView
+                android:id="@+id/textViewAdicionarImagemGrupo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adicionar imagem"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
+                android:fontFamily="@font/poppins"
+                android:drawableStart="@drawable/baseline_add_24"
+                android:drawablePadding="8dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <!-- Botão de Criar Conta -->

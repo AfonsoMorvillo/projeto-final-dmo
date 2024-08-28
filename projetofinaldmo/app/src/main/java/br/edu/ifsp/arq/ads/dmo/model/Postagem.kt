@@ -1,5 +1,6 @@
 package br.edu.ifsp.arq.ads.dmo.model
 
+import com.google.firebase.Timestamp
 import java.io.Serializable
 import java.util.UUID
 
@@ -10,7 +11,7 @@ data class Postagem(
     var descricao: String = "",
     var quantidade: Int? = 0,
     var foto: String = "",
-    var data: String = "",
+    var data: Timestamp = Timestamp.now(),
     var grupoId: String = "",
     var nomeUsuario: String = ""
 ) : Serializable {
@@ -22,7 +23,7 @@ data class Postagem(
         "",
         0,
         "",
-        "",
+        Timestamp.now(),
         "",
         ""
     )

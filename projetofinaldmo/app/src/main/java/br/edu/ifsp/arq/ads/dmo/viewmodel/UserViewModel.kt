@@ -2,6 +2,7 @@ package br.edu.ifsp.arq.ads.dmo.viewmodel
 
 
 import android.app.Application
+import android.net.Uri
 import android.preference.PreferenceManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -13,7 +14,13 @@ class UserViewModel (application: Application) : AndroidViewModel(application) {
 
     private val usersRepository = UserRepository(getApplication())
 
-    fun createUser(user: User) = usersRepository.createUser(user)
+    fun createUser(user: User): LiveData<Boolean> {
+        val liveData = MutableLiveData<Boolean>()
+        usersRepository.createUser(user) {
+            liveData.value = true
+        }
+        return liveData
+    }
 
     fun updateUser(user: User) = usersRepository.update(user)
 
@@ -33,6 +40,8 @@ class UserViewModel (application: Application) : AndroidViewModel(application) {
     }
 
     fun resetPassword(email: String) = usersRepository.resetPassword(email)
+
+    fun uploadUserImage(userId: String, photoUri: Uri) = usersRepository.uploadUserImage(userId, photoUri)
 
     companion object {
         val USER_ID = "USER_ID"

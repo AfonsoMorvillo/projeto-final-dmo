@@ -41,6 +41,16 @@
         <item name="borderWidth">0dp</item> <!-- Remove a borda se necessário -->
     </style>
 
+    <!-- cor do datepicker-->
+    <style name="CustomDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Personalize a aparência do dialog -->
+        <item name="colorAccent">@color/colorPrimary</item> <!-- Cor de bolinha -->
+        <item name="android:background">@color/dark_gray</item> <!-- Cor de fundo -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Cor do texto -->
+        <item name="android:textColorSecondary">#FFFFFF</item>
+    </style>
+
+
 
 
 

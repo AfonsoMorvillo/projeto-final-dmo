@@ -30,4 +30,8 @@ class GrupoViewModel  (application: Application) : AndroidViewModel(application)
 
     fun getGrupo(grupoId: String) = grupoReposiory.getGrupo(grupoId)
 
+    fun juntarSeGrupo(grupoId: String, userId: String): LiveData<Boolean> {
+        return grupoReposiory.juntarSeGrupo(grupoId, userId)
+    }
+
 }

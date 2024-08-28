@@ -36,7 +36,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/poppins"
         android:paddingTop="25dp"
-        android:text="Insira um link de convite valido para participar de um grupo."
+        android:text="Insira um grupo valido para participar."
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp" />
@@ -47,12 +47,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:hint="Link de convite"
+        android:hint="Link do grupo"
         app:hintTextColor="@color/white"
         style="@style/LoginTextInputLayoutStyle"
         >
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextNome"
+            android:id="@+id/edtGrupo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"

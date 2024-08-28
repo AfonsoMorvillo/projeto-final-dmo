@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,11 +14,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import br.edu.ifsp.arq.ads.dmo.dialog.DialogLoading
 import br.edu.ifsp.arq.ads.dmo.model.Postagem
 import br.edu.ifsp.arq.ads.dmo.model.User
 import br.edu.ifsp.arq.ads.dmo.viewmodel.PostagemViewModel
 import br.edu.ifsp.arq.ads.dmo.viewmodel.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import java.util.UUID
 
@@ -27,7 +30,6 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
     lateinit var txtTitulo: TextInputEditText
     lateinit var txtDescricao: TextInputEditText
-    lateinit var txtData: TextInputEditText
     lateinit var txtQuantidade: TextInputEditText
     lateinit var btnSave: Button
     private lateinit var imageView: ImageView
@@ -38,6 +40,8 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
     private val userViewModel by viewModels<UserViewModel>()
     private val postViewModel by viewModels<PostagemViewModel>()
+
+    lateinit var loading: DialogLoading
 
     private var imageUri: Uri? = null
 
@@ -50,6 +54,8 @@ class CadastroPostagemActivity : AppCompatActivity() {
         postagem = Postagem()
         postagem.id = "0"
 
+        loading = DialogLoading(this)
+
         setComponents()
         setBtnSave()
     }
@@ -57,7 +63,6 @@ class CadastroPostagemActivity : AppCompatActivity() {
     private fun setComponents() {
         txtTitulo = findViewById(R.id.editTextTitulo)
         txtDescricao = findViewById(R.id.edtDescricao)
-        txtData = findViewById(R.id.edtData)
         txtQuantidade = findViewById(R.id.editTextQuantidade)
         btnSave = findViewById(R.id.btn_criar_grupo)
         imageView = findViewById(R.id.imageView)
@@ -67,6 +72,11 @@ class CadastroPostagemActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
+    }
+
+    fun selecionarImagem(view: View) {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
     private fun setBtnSave() {
@@ -89,6 +99,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
 
     private fun addPostagem() {
         if (validate()) {
+            loading.showDialog("Publicando...")
             val storageReference = FirebaseStorage.getInstance().reference
             val imageRef = storageReference.child("images/${UUID.randomUUID()}.jpg")
             val quantidade = txtQuantidade.text.toString()
@@ -105,7 +116,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
                                 txtDescricao.text.toString(),
                                 quantidadeNumber,
                                 uri.toString(), // URL da imagem salva no Firebase Storage
-                                txtData.text.toString(),
+                                data = Timestamp.now(),
                                 grupoId
                             )
                             postViewModel.createPostagem(postagem)
@@ -114,11 +125,13 @@ class CadastroPostagemActivity : AppCompatActivity() {
                                 "Postagem publicada com sucesso!",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            loading.hideDialog()
                             setResult(RESULT_OK)
                             finish()
                         }
                     }
                     .addOnFailureListener {
+                        loading.hideDialog()
                         Toast.makeText(this, "Falha ao carregar a imagem", Toast.LENGTH_SHORT).show()
                     }
             } else {
@@ -130,7 +143,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
                     txtDescricao.text.toString(),
                     quantidadeNumber,
                     "", // Sem URL da imagem
-                    txtData.text.toString(),
+                    data = Timestamp.now(),
                     grupoId
                 )
                 postViewModel.createPostagem(postagem)
@@ -139,6 +152,7 @@ class CadastroPostagemActivity : AppCompatActivity() {
                     "Postagem publicada com sucesso!",
                     Toast.LENGTH_SHORT
                 ).show()
+                loading.hideDialog()
                 setResult(RESULT_OK)
                 finish()
             }
@@ -152,12 +166,6 @@ class CadastroPostagemActivity : AppCompatActivity() {
             isValid = false
         } else {
             txtTitulo.error = null
-        }
-        if (txtData.text.toString().trim { it <= ' ' }.isEmpty()) {
-            txtData.error = "Preencha a data."
-            isValid = false
-        } else {
-            txtData.error = null
         }
         if (txtQuantidade.text.toString().trim { it <= ' ' }.isEmpty()) {
             txtQuantidade.error = "Preencha a quantidade."

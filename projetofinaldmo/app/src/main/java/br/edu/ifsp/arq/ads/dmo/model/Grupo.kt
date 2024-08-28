@@ -31,9 +31,12 @@ data class Grupo(
 
     enum class TipoMaterial(val value: String) {
         LATA("Lata"),
-        PAPEL("Papel"),
-        VIDRO("Vidro"),
-        LACRE("Lacre")
+        LACRE("Lacre"),
+        GARRAFA("Garrafa PET"),
+        TAMPINHA("Tampinha"),
+        PILHA("Pilha"),
+        LAMPADA("Lâmpada")
+
     }
 
     fun calculaPercentual(): Int {
